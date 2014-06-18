@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="main_menu">
+        <item>@string/app_manager</item>
+        <item>@string/app_sms_blocker</item>
+        <item>@string/data_monitor</item>
+        <item>@string/virus_scanner</item>
+    </string-array>
+    
+
+</resources>
