@@ -17,7 +17,6 @@ package vn.cybersoft.summerms.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;

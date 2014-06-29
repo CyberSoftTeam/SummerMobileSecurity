@@ -15,6 +15,9 @@
  ******************************************************************************/
 package vn.cybersoft.summerms;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -23,6 +26,8 @@ public class Preferences extends Application {
 	// Preferences Constants
 	private final String PREFERENCES_NAME = "preferences";
 	private final String SOMETHING = "something";
+	private final String LOCKED_APPS = "applist";
+	private final String PIN = "pinpin";
 
 	private SharedPreferences preferences;
 	private static Preferences pre;
@@ -33,7 +38,11 @@ public class Preferences extends Application {
 		super.onCreate();
 		pre = this;
 		preferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-		
+
+		// default PIN & configs, just for testing
+		Preferences.getInstance().savePIN("1234");
+		Preferences.getInstance().saveAppState(Constants.CURRENT_PACKAGE, Constants.STATE_LOCKED);
+
 	}
 
 	/**
@@ -44,7 +53,77 @@ public class Preferences extends Application {
 	public static Preferences getInstance() {
 		return pre;
 	}
-	
+
+	/**
+	 * Save state of an application
+	 * 
+	 */
+	public void saveAppState(String app, int state) {
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putInt(app, state);
+		editor.commit();
+	}
+
+	/**
+	 * Get state of an application
+	 * 
+	 */
+	public int getAppState(String app) {
+		return preferences.getInt(app, 0);
+	}
+
+	/**
+	 * Save PIN to preference
+	 * 
+	 * @param pin
+	 */
+	public void savePIN(String pin) {
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putString(PIN, pin);
+		editor.commit();
+	}
+
+	/**
+	 * Get PIN from preference
+	 * 
+	 * @return null if not exist
+	 */
+	public String getPIN() {
+		return preferences.getString(PIN, null);
+	}
+
+	/**
+	 * Save apps to preference
+	 * 
+	 * @param apps
+	 */
+	public void saveLockedApps(Set<String> apps) {
+		SharedPreferences.Editor editor = preferences.edit();
+		StringBuilder appset = new StringBuilder();
+		for (String app : apps) {
+			appset.append(app+Constants.COMMA);
+		}
+		editor.putString(LOCKED_APPS, appset.toString());
+		editor.commit();
+	}
+
+	/**
+	 * Get apps from preference
+	 * 
+	 * @return empty set if not exist
+	 */
+	public Set<String> getLockedApps() {
+		Set<String> appset = new HashSet<String>();
+		String data = preferences.getString(LOCKED_APPS, null);
+		if (data!=null) {
+			String[] apps = data.split(Constants.COMMA);
+			for (String app : apps) {
+				appset.add(app);
+			}
+		}
+		return appset;
+	}
+
 	/**
 	 * Save something to preference
 	 * 
@@ -64,5 +143,5 @@ public class Preferences extends Application {
 	public String getSomething() {
 		return preferences.getString(SOMETHING, null);
 	}
-	
+
 }

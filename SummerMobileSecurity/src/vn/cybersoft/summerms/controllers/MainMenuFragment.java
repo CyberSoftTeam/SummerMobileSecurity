@@ -58,6 +58,7 @@ public class MainMenuFragment extends ListFragment {
 		// switch fragment here (newContent)
 		switch (position) {
 		case APP_MANAGER:
+			newContent = new AppListFragment();
 			break;
 		case DATA_MONITOR:
 			break;
@@ -66,11 +67,14 @@ public class MainMenuFragment extends ListFragment {
 		case VIRUS_SCANNER:
 			break;
 		}
-			
+		
+		if (newContent!=null) {
+			switchFragment(newContent, R.string.app_manager);
+		}
 	}
 
 	// the meat of switching the above fragment
-	private void switchFragment(Fragment fragment, String title) {
+	private void switchFragment(Fragment fragment, int titleId) {
 		if (getActivity() == null)
 			return;
 

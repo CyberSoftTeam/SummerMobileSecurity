@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
-     <!-- Common text -->
+    <!-- Common text -->
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_reset">Clear</string>
@@ -13,11 +13,17 @@
     <string name="btn_setting">Setting</string>
     <string name="no_network">The internet is not available. Please click setting button to set up your network.</string>
     <string name="processing">Processing&#8230;</string>
-    
+
     <!-- Main Menu -->
     <string name="app_manager">App Manager</string>
     <string name="app_sms_blocker">App &amp; SMS Blocker</string>
     <string name="data_monitor">Data Monitor</string>
     <string name="virus_scanner">Virus Scanner</string>
+
+    <!-- Application Manager -->
+    <string name="btn_lockApp">Lock</string>
+    <string name="btn_unlockApp">Unlock</string>
+    <string name="PIN_input">Enter your PIN</string>
+    <string name="title_activity_enter_pin">Enter Your PIN</string>
 
 </resources>

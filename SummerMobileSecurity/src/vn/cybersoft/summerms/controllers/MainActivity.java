@@ -16,7 +16,8 @@
 package vn.cybersoft.summerms.controllers;
 
 import vn.cybersoft.summerms.R;
-import android.graphics.Point;
+import vn.cybersoft.summerms.services.AppLockerService;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Display;
@@ -30,6 +31,7 @@ public class MainActivity extends MainBaseActivity {
 		super(R.string.app_name);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,7 +42,7 @@ public class MainActivity extends MainBaseActivity {
 		if (mContent==null) {
 			mContent = new AboutApp();
 		}
-		
+
 		// set the Above View
 		setContentView(R.layout.content_frame);
 		getSupportFragmentManager()
@@ -57,14 +59,19 @@ public class MainActivity extends MainBaseActivity {
 
 		// customize the SlidingMenu
 		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		getSlidingMenu().setBehindWidth(size.x/2);
+		// Point size = new Point();
+		// display.getSize(size);
+		int w = display.getWidth();
+		getSlidingMenu().setBehindWidth(w/2);
 		getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 
+		
+		if (!AppLockerService.isRunning) {
+			Intent intentService = new Intent(this, AppLockerService.class);
+			startService(intentService);
+		}
 
 	}
-
 
 	public void switchContent(Fragment fragment) {
 		// revert to default sliding menu mode

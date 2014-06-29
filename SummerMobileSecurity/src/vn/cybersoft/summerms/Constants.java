@@ -20,7 +20,7 @@ import java.io.File;
 import android.os.Environment;
 
 public class Constants {
-	public static final String TAG = "android";
+	public static final String TAG = "SummerMobileSecurity";
 	public static final String TAG_SOUND_DETECT = "detect";
 
 	public static final String NEW_LINE = "\n";
@@ -47,7 +47,14 @@ public class Constants {
 	public static final String SUCCESS = "SUCCESS";
 	public static final String FAIL = "FAIL";
 	public static final String UTF8 = "UTF-8";
-
+	
+	public static final String CURRENT_PACKAGE = "vn.cybersoft.summerms";
+	
+	// Application's states
+	public static final int STATE_UNLOCKED = 0; 
+	public static final int STATE_LOCKED = 1; 
+	public static final int STATE_PINPASSED = 2; 
+	
 	// Storage paths
 	public static final String APPLICATION_PATH = Environment.getExternalStorageDirectory() + File.separator
 			+ "SummerMobileSecuriry";
