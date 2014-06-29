@@ -7,12 +7,14 @@ SummerMobileSecurity
 
 
 Actually the following functions are implemented:
-* Application scanning
-* SMS/Application blocking
-* Data monitor
+* Application manager
+    - Overview of all applications in device, include application's permissions.
+    - Allow user choose some application to lock with specific PIN.
 
 
 Further developments will include:
+* SMS/Application blocking
+* Data monitor
 * Virus & malware (pending)
 * Optimization (pending)
 
