@@ -139,6 +139,10 @@ public class AppLockerService extends Service {
 				pre.saveAppState(packName, Constants.STATE_LOCKED);
 			}
 		}
+		
+		// reset PINpassed state of current package
+		Preferences.getInstance()
+			.saveAppState(Constants.CURRENT_PACKAGE, Constants.STATE_LOCKED);
 	}
 
 	/**

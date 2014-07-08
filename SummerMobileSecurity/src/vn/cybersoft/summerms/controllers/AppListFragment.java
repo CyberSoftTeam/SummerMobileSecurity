@@ -59,7 +59,8 @@ public class AppListFragment extends Fragment {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				super.doInBackground();
-
+				items = new ArrayList<AppListFragment.AppItem>();
+				
 				List<ResolveInfo> apps = PackageService.getInstance().getApps(pm);
 				AppItem app;
 

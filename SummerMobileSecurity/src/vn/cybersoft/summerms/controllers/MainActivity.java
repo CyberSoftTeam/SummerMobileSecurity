@@ -15,8 +15,10 @@
  ******************************************************************************/
 package vn.cybersoft.summerms.controllers;
 
+import vn.cybersoft.summerms.Preferences;
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.services.AppLockerService;
+import vn.cybersoft.summerms.utils.StringUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,7 +37,12 @@ public class MainActivity extends MainBaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		if (StringUtil.isEmptyOrNull(Preferences.getInstance().getPIN())) {
+			Intent initPin = new Intent(this, InitPINActivity.class);
+			startActivity(initPin);
+		}
+		
 		// set the Above View
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");

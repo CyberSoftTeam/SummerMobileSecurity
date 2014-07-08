@@ -35,6 +35,7 @@ public class MainMenuFragment extends ListFragment {
 	public static final int BLOCKER = 1;
 	public static final int DATA_MONITOR = 2;
 	public static final int VIRUS_SCANNER = 3;
+	public static final int ABOUT = 4;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,6 +66,9 @@ public class MainMenuFragment extends ListFragment {
 		case BLOCKER:
 			break;
 		case VIRUS_SCANNER:
+			break;
+		case ABOUT:
+			newContent = new AboutApp();
 			break;
 		}
 		

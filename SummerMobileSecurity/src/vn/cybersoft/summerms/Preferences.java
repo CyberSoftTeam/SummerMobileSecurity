@@ -39,10 +39,6 @@ public class Preferences extends Application {
 		pre = this;
 		preferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
 
-		// default PIN & configs, just for testing
-		Preferences.getInstance().savePIN("1234");
-		Preferences.getInstance().saveAppState(Constants.CURRENT_PACKAGE, Constants.STATE_LOCKED);
-
 	}
 
 	/**

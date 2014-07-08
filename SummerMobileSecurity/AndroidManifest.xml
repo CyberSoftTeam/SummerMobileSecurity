@@ -41,7 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+		
         <service android:name="vn.cybersoft.summerms.services.AppLockerService" />
 
         <activity
@@ -49,6 +49,11 @@
             android:excludeFromRecents="true"
             android:label="@string/title_activity_enter_pin" >
         </activity>
+        
+        <activity 
+            android:name="vn.cybersoft.summerms.controllers.InitPINActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/title_activity_enter_pin"/>
     </application>
 
 </manifest>

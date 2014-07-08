@@ -19,11 +19,18 @@
     <string name="app_sms_blocker">App &amp; SMS Blocker</string>
     <string name="data_monitor">Data Monitor</string>
     <string name="virus_scanner">Virus Scanner</string>
+    <string name="about">About</string>
 
     <!-- Application Manager -->
     <string name="btn_lockApp">Lock</string>
     <string name="btn_unlockApp">Unlock</string>
     <string name="PIN_input">Enter your PIN</string>
+    <string name="new_pin">Enter your new PIN</string>
+    <string name="confirm_pin">Enter yout new PIN again</string>
     <string name="title_activity_enter_pin">Enter Your PIN</string>
+    
+    <!-- Error messages -->
+    <string name="invalid_pin">Your PIN is invalid</string>
+    <string name="unmatch_pin">Two PIN value is not match</string>
 
 </resources>

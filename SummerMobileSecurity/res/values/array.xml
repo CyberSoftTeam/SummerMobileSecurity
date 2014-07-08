@@ -6,6 +6,7 @@
         <item>@string/app_sms_blocker</item>
         <item>@string/data_monitor</item>
         <item>@string/virus_scanner</item>
+        <item>@string/about</item>
     </string-array>
     
 
