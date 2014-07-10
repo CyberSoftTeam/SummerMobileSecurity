@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2014 IUH.CyberSoft Team (http://cyberso.wordpress.com/)
+ * Copyright 2014 VietDung Vu, IUH.CyberSoft Team (http://cyberso.wordpress.com/)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package vn.cybersoft.summerms.controllers;
 import vn.cybersoft.summerms.Constants;
 import vn.cybersoft.summerms.Preferences;
 import vn.cybersoft.summerms.R;
-import vn.cybersoft.summerms.services.AppLockerService;
 import vn.cybersoft.summerms.utils.MessageUtil;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,32 +30,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class EnterPINActivity extends Activity {
-	public static final String PACK_KEY = "packName";
-
+public class ResetPINActivity extends Activity {
+	private EditText oldPIN;
+	private EditText newPIN;
+	private EditText confirmPIN;
 	private Button btnOK;
-	private EditText editPIN;
-
-	private String packName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-		setContentView(R.layout.activity_enter_pin);
-
-		packName = getIntent().getExtras().getString(PACK_KEY);
+		setContentView(R.layout.activity_reset_pin);
 
 		btnOK = (Button) findViewById(R.id.btn_ok);
-		editPIN = (EditText) findViewById(R.id.edit_pin);
+		oldPIN = (EditText) findViewById(R.id.old_pin);	
+		newPIN = (EditText) findViewById(R.id.edit_pin);	
+		confirmPIN = (EditText) findViewById(R.id.confirm_pin);	
 
-		editPIN.setOnEditorActionListener(new OnEditorActionListener() {
+		confirmPIN.setOnEditorActionListener(new OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId,
 					KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					checkPIN();
+					verifyPIN();
 				}
 				return false;
 			}
@@ -66,52 +62,45 @@ public class EnterPINActivity extends Activity {
 		btnOK.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				checkPIN();
+				verifyPIN();
 			}
-
-
 		});
 	}
 
-	private void checkPIN() {
-		String PIN = Preferences.getInstance().getPIN();
-		String pinIn = editPIN.getText().toString();
-
-		// check PIN for another applications
-		if (pinIn.equals(PIN)) {
-			Intent runIntent = getPackageManager()
-					.getLaunchIntentForPackage(packName);
-			Preferences.getInstance().saveAppState(packName,
-					Constants.STATE_PINPASSED);
-			if (runIntent!=null) {
-				startActivity(runIntent);
+	private void verifyPIN() {
+		String old = oldPIN.getText().toString();
+		String nPin = newPIN.getText().toString();
+		String confirm = confirmPIN.getText().toString();
+		
+		// 1st step: old PIN is true ?
+		if (old.equalsIgnoreCase(Preferences.getInstance().getPIN())) {
+			// 2nd step: two PIN value is match ?
+			if (nPin.equalsIgnoreCase(confirm)) {
+				Preferences.getInstance().savePIN(nPin);
+				Preferences.getInstance()
+				.saveAppState(Constants.CURRENT_PACKAGE, Constants.STATE_LOCKED);
+				ResetPINActivity.this.finish();
+			} else {
+				MessageUtil.showToastInfo(ResetPINActivity.this,
+						R.string.unmatch_pin);
+				newPIN.requestFocus();
 			}
 		} else {
-			MessageUtil.showToastInfo(EnterPINActivity.this,
+			MessageUtil.showToastInfo(ResetPINActivity.this,
 					R.string.invalid_pin);
-			Intent startMain = new Intent(Intent.ACTION_MAIN);
-			startMain.addCategory(Intent.CATEGORY_HOME);
-			startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(startMain);
+			finish();
 		}
-		EnterPINActivity.this.finish();
-	}
-
-	@Override
-	public void onBackPressed() {
-		// nothing to do here
+		
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		EnterPINActivity.this.finish();
+		ResetPINActivity.this.finish();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Intent runIntent = new Intent(this, AppLockerService.class);
-		startService(runIntent);
 	}
 }

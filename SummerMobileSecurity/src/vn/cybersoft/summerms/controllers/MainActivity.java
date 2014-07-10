@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Display;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends MainBaseActivity {
@@ -92,5 +94,22 @@ public class MainActivity extends MainBaseActivity {
 		.commit();
 		getSlidingMenu().showContent();
 	}
-
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getSupportMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.reset_pin:
+			Intent resetPin = new Intent(this, ResetPINActivity.class);
+			startActivity(resetPin);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

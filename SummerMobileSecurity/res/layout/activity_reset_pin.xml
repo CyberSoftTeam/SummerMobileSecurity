@@ -8,7 +8,38 @@
     tools:context=".EnterPINActivity" >
 
     <TextView
-        android:id="@+id/desc"
+        style="@style/Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/old_pin"
+        android:padding="10dp"
+        android:textColor="@color/black" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black" />
+
+    <EditText
+        android:id="@+id/old_pin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:imeOptions="actionNext"
+        android:inputType="numberPassword"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="19sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/black" />
+    
+    <TextView
         style="@style/Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
