@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_margin="15dp"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_weight="0.88"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/image_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:layout_weight="0.12"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/tv_app_name"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Facebook" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"
+                android:text="20.6MB" />
+            
+        </RelativeLayout>
+
+         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/tv_upload"
+                android:textStyle="italic"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload: 16K" />
+
+            <TextView
+                android:id="@+id/tv_download"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:textStyle="italic"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_height="wrap_content"
+                android:text="Download: 20.6MB" />
+            
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

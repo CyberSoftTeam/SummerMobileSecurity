@@ -58,5 +58,13 @@ public class Constants {
 	// Storage paths
 	public static final String APPLICATION_PATH = Environment.getExternalStorageDirectory() + File.separator
 			+ "SummerMobileSecuriry";
-	public static final String DATABASE_PATH = APPLICATION_PATH + File.separator + "databases"; 
+	public static final String DATABASE_PATH = APPLICATION_PATH + File.separator + "databases";
+	//Data Monitor
+	public final static String DATE="day";
+	public final  static String VALUE_START_UPLOAD="value_start_upload";
+	public final  static String VALUE_START_UPLOAD_LAST="value_start_upload_last";
+	public final  static String VALUE_START_DOWNLOAD="value_start_download";
+	public final  static String VALUE_START_DOWNLOAD_LAST="value_start_download_last";
+	public final  static String APP_NAME="app_name";
+	public final  static String APP_ID="app_id";
 }

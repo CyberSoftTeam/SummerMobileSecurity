@@ -62,6 +62,7 @@ public class MainMenuFragment extends ListFragment {
 			newContent = new AppListFragment();
 			break;
 		case DATA_MONITOR:
+			newContent=new FragmentDataMonitor();
 			break;
 		case BLOCKER:
 			break;
