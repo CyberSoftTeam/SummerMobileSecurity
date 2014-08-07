@@ -1,7 +1,4 @@
 package vn.cybersoft.summerms.model;
-
-import java.sql.Date;
-
 public class DateTraffic {
 	private String date ;
 	private long startupLoad;

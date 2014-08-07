@@ -1,7 +1,6 @@
 package vn.cybersoft.summerms.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import vn.cybersoft.summerms.R;
 import android.content.Context;
