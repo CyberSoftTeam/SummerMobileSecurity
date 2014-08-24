@@ -59,7 +59,8 @@ public class MainMenuFragment extends ListFragment {
 		// switch fragment here (newContent)
 		switch (position) {
 		case APP_MANAGER:
-			newContent = new AppListFragment();
+			//newContent = new AppListFragment();
+			newContent = new AppManagementFragment();
 			break;
 		case DATA_MONITOR:
 			newContent=new FragmentDataMonitor();

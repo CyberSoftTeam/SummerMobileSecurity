@@ -30,6 +30,8 @@
     <string name="new_pin">Enter your new PIN</string>
     <string name="confirm_pin">Enter your new PIN again</string>
     <string name="title_activity_enter_pin">Enter Your PIN</string>
+    <string name="all_apps">All Applications</string>
+    <string name="running_apps">Running Applications</string>
     
     <!-- Error messages -->
     <string name="invalid_pin">Your PIN is invalid</string>

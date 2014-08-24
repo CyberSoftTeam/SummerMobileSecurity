@@ -88,6 +88,7 @@ public class AppLockerService extends Service {
 		startForeground(FOREGROUND_NTF_ID, notification);
 
 		// Start checking timer
+		stopChecking();
 		startChecking();
 
 		return START_REDELIVER_INTENT;
