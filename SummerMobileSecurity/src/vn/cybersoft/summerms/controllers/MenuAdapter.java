@@ -17,6 +17,8 @@ package vn.cybersoft.summerms.controllers;
 
 import java.util.List;
 
+import vn.cybersoft.summerms.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +61,17 @@ public class MenuAdapter extends ArrayAdapter<String>{
 		menuText.setText(item);
 		
 		int drawId = android.R.drawable.btn_star;
+		if ( item.equals(context.getString(R.string.app_manager)) ) {
+			drawId = R.drawable.ic_app_mng;
+		} else if ( item.equals(context.getString(R.string.call_sms_blocker)) ) {
+			drawId = R.drawable.ic_call_blocker;
+		} else if ( item.equals(context.getString(R.string.data_monitor)) ) {
+			drawId = R.drawable.ic_data_monitor;
+		} else if ( item.equals(context.getString(R.string.virus_scanner)) ) {
+			drawId = R.drawable.ic_virus_scanner;
+		} else if ( item.equals(context.getString(R.string.about)) ) {
+			drawId = R.drawable.ic_about;
+		}
 		
 		menuText.setCompoundDrawablesWithIntrinsicBounds(
 				context.getResources().getDrawable(drawId), null, null, null);

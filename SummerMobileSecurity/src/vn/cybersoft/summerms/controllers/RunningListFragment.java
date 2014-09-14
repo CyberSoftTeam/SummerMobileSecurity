@@ -15,33 +15,36 @@
  ******************************************************************************/
 package vn.cybersoft.summerms.controllers;
 
-import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
 
-import vn.cybersoft.summerms.Constants;
 import vn.cybersoft.summerms.Preferences;
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.tasks.TimeConsumeTask;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 /**
  * @author vietdung
  *
  */
 public class RunningListFragment extends Fragment {
-	private PackageManager pm;
 	private ActivityManager activityManager;
+	private static List<RunningItem> items = new ArrayList<RunningListFragment.RunningItem>();
+	private ListView listView;
+	private RunningItemAdapter adapter;
+	private PackageManager pm;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,9 +57,8 @@ public class RunningListFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_runnings, null);
-		final TextView textView = (TextView) view.findViewById(R.id.runnings);
-		final StringBuilder stringBuilder = new StringBuilder();
+		View view = inflater.inflate(R.layout.running_list, null);
+		listView = (ListView) view.findViewById(R.id.runninglist);
 		
 		TimeConsumeTask task = new TimeConsumeTask(getActivity()) {
 			@Override
@@ -74,7 +76,7 @@ public class RunningListFragment extends Fragment {
 					stringBuilder.append("topActivity="+runningTaskInfo.topActivity+"\n");
 					stringBuilder.append("baseActivity="+runningTaskInfo.baseActivity+"\n");
 					stringBuilder.append("\n\n");
-				}*/
+				}
 				
 				List<RunningAppProcessInfo> processInfos = activityManager.
 						getRunningAppProcesses();
@@ -92,30 +94,71 @@ public class RunningListFragment extends Fragment {
 						stringBuilder.append(pkg+" ");
 					}
 					stringBuilder.append("\n\n");
+				}*/
+				
+				List<RunningAppProcessInfo> processInfos = activityManager.
+						getRunningAppProcesses();
+				for (RunningAppProcessInfo info : processInfos) {
+					RunningItem item = new RunningItem();
+					
+					try {
+						ApplicationInfo appInfo = pm
+								.getApplicationInfo(info.processName,
+										PackageManager.GET_ACTIVITIES);
+						item.label = appInfo.loadLabel(pm);
+						item.icon = appInfo.loadIcon(pm);
+						
+					} catch (NameNotFoundException e) {
+						item.label = info.processName;
+						item.icon = getResources().getDrawable(R.drawable.default_app_icon);
+					}
+					
+					switch (info.importance) {
+					case RunningAppProcessInfo.IMPORTANCE_BACKGROUND:
+						item.importance = getString(R.string.importance_background_desc);
+						break;
+					case RunningAppProcessInfo.IMPORTANCE_EMPTY:
+						item.importance = getString(R.string.importance_empty_desc);
+						break;
+					case RunningAppProcessInfo.IMPORTANCE_FOREGROUND:
+						item.importance = getString(R.string.importance_foreground_desc);
+						break;
+					case RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE:
+						item.importance = getString(R.string.importance_perceptible_desc);
+						break;
+					case RunningAppProcessInfo.IMPORTANCE_SERVICE:
+						item.importance = getString(R.string.importance_service_desc);
+						break;
+					case RunningAppProcessInfo.IMPORTANCE_VISIBLE:
+						item.importance = getString(R.string.importance_visible_desc);
+						break;
+					}
+					
+					items.add(item);
 				}
+				
+				adapter = new RunningItemAdapter(getActivity(), pm);
+				adapter.setData(items);
 				
 				return true;
 			}
-
+			
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				if (result) {
-					textView.setText(stringBuilder.toString());
-					textView.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							activityManager.killBackgroundProcesses(Constants.CURRENT_PACKAGE);
-							Process.sendSignal(Process.myPid(), Process.SIGNAL_KILL);
-						}
-					});
+					listView.setAdapter(adapter);
 				}
 			}
 		};
 		task.execute();
 		
-		
 		return view;
 	}
-
+	
+	public static class RunningItem {
+		public Drawable icon;
+		public CharSequence label;
+		public String importance;
+	}
 }

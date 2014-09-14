@@ -24,6 +24,8 @@ import vn.cybersoft.summerms.controllers.AppListFragment.AppItem;
 import vn.cybersoft.summerms.widgets.AnimatedExpandableListView.AnimatedExpandableListAdapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -145,9 +147,14 @@ public class AppItemAdapter extends AnimatedExpandableListAdapter {
 		} else {
 			holder = (ChildHolder) convertView.getTag();
 		}
-
-		holder.permission.setText(item);
-
+		
+		try {
+			PermissionInfo perInfo = pm.getPermissionInfo(item, PackageManager.GET_META_DATA);
+			holder.permission.setText(perInfo.loadLabel(pm));
+		} catch (NameNotFoundException e) {
+			holder.permission.setText(item);
+			e.printStackTrace();
+		}
 		return convertView;
 	}
 

@@ -14,10 +14,11 @@
     <string name="no_network">The internet is not available. Please click setting button to set up your network.</string>
     <string name="processing">Processing&#8230;</string>
     <string name="reset_pin">Reset PIN</string>
+    <string name="system_info">System Info</string>
 
     <!-- Main Menu -->
     <string name="app_manager">App Manager</string>
-    <string name="app_sms_blocker">App &amp; SMS Blocker</string>
+    <string name="call_sms_blocker">Call &amp; SMS Blocker</string>
     <string name="data_monitor">Data Monitor</string>
     <string name="virus_scanner">Virus Scanner</string>
     <string name="about">About</string>
@@ -32,6 +33,12 @@
     <string name="title_activity_enter_pin">Enter Your PIN</string>
     <string name="all_apps">All Applications</string>
     <string name="running_apps">Running Applications</string>
+	<string name="importance_background_desc">This process process contains background code that is expendable</string>   
+	<string name="importance_empty_desc">This process is empty of any actively running code.</string>   
+	<string name="importance_foreground_desc">This process is running the foreground UI.</string>   
+	<string name="importance_perceptible_desc">This process is running something that is considered to be actively perceptible to the user.</string>   
+	<string name="importance_service_desc">This process is contains services that should remain running.</string>   
+	<string name="importance_visible_desc">This process is running something that is actively visible to the user, though not in the immediate foreground</string>   
     
     <!-- Error messages -->
     <string name="invalid_pin">Your PIN is invalid</string>

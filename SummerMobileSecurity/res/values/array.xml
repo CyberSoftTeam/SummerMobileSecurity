@@ -3,7 +3,7 @@
 
     <string-array name="main_menu">
         <item>@string/app_manager</item>
-        <item>@string/app_sms_blocker</item>
+        <item>@string/call_sms_blocker</item>
         <item>@string/data_monitor</item>
         <item>@string/virus_scanner</item>
         <item>@string/about</item>
