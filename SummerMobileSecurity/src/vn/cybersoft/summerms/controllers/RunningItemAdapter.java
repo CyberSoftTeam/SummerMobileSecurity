@@ -19,10 +19,12 @@ import java.util.List;
 
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.controllers.RunningListFragment.RunningItem;
+import vn.cybersoft.summerms.services.PackageService;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -36,10 +38,12 @@ import android.widget.TextView;
 public class RunningItemAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private PackageManager pm;
+	private Context context;
 	private List<RunningItem> items;
 
 	public RunningItemAdapter(Context context, PackageManager pm) {
 		this.inflater = LayoutInflater.from(context);
+		this.context = context;
 		this.pm = pm;
 	}
 
@@ -64,21 +68,30 @@ public class RunningItemAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		RunningItem item = getItem(position);
-		final TextView packageName;
+		final RunningItem item = getItem(position);
+		final TextView label;
 		final TextView importance;
 		final ImageView icon;
 		final Button sysInfo;
 		convertView = inflater.inflate(R.layout.running_list_item, parent, false);
 		
-		packageName = (TextView) convertView.findViewById(R.id.appLabel);
+		label = (TextView) convertView.findViewById(R.id.appLabel);
 		importance = (TextView) convertView.findViewById(R.id.importance);
 		icon = (ImageView) convertView.findViewById(R.id.appIcon);
 		sysInfo = (Button) convertView.findViewById(R.id.btn_sys_info);
 		
-		packageName.setText(item.label);
+		label.setText(item.label);
 		importance.setText(item.importance);
 		icon.setImageDrawable(item.icon);
+		sysInfo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (item.packageName != null) {
+					PackageService.getInstance()
+					.showInstalledAppDetails(context, item.packageName);
+				}
+			}
+		});
 		
 		return convertView;
 	}

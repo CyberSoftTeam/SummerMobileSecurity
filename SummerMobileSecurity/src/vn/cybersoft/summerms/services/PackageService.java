@@ -24,11 +24,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import vn.cybersoft.summerms.Constants;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -98,5 +101,30 @@ public class PackageService {
 		PackageInfo packageInfo = null;
 		packageInfo = pm.getPackageInfo(info.activityInfo.packageName, PackageManager.GET_PERMISSIONS);
 		return packageInfo.requestedPermissions;
+	}
+	
+	/**
+	 * Open application detail page
+	 * 
+	 * @param context
+	 * @param packageName
+	 */
+	public void showInstalledAppDetails(Context context, String packageName) {
+	    final int apiLevel = Build.VERSION.SDK_INT;
+	    Intent intent = new Intent();
+
+	    if (apiLevel >= 9) {
+	        intent.setAction(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+	        intent.setData(Uri.parse("package:" + packageName));
+	    } else {
+	        final String appPkgName = (apiLevel == 8 ? "pkg" : "com.android.settings.ApplicationPkgName");
+
+	        intent.setAction(Intent.ACTION_VIEW);
+	        intent.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+	        intent.putExtra(appPkgName, packageName);
+	    }
+
+	    // Start Activity
+	    context.startActivity(intent);
 	}
 }

@@ -64,6 +64,7 @@ public class RunningListFragment extends Fragment {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				super.doInBackground();
+				items = new ArrayList<RunningListFragment.RunningItem>();
 				
 				/*List<ActivityManager.RunningTaskInfo> taskInfos = activityManager
 						.getRunningTasks(40);
@@ -105,6 +106,7 @@ public class RunningListFragment extends Fragment {
 						ApplicationInfo appInfo = pm
 								.getApplicationInfo(info.processName,
 										PackageManager.GET_ACTIVITIES);
+						item.packageName = appInfo.packageName;
 						item.label = appInfo.loadLabel(pm);
 						item.icon = appInfo.loadIcon(pm);
 						
@@ -160,5 +162,6 @@ public class RunningListFragment extends Fragment {
 		public Drawable icon;
 		public CharSequence label;
 		public String importance;
+		public String packageName;
 	}
 }
