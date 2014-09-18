@@ -15,22 +15,25 @@
 package vn.cybersoft.summerms.model;
 
 import java.util.HashMap;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 public class TrafficSnapshot {
 	private TrafficRecord device=null;
+	@SuppressLint("UseSparseArrays")
 	private HashMap<Integer, TrafficRecord> apps=
 			new HashMap<Integer, TrafficRecord>();
 
+	@SuppressLint("UseSparseArrays")
 	public TrafficSnapshot(Context ctxt) {
 		device=new TrafficRecord();
 		HashMap<Integer, String> appNames=new HashMap<Integer, String>();
 		for (ApplicationInfo app :
 			ctxt.getPackageManager().getInstalledApplications(0)) {
 			//String name = (String) ctxt.getPackageManager().getApplicationLabel(app);
-			appNames.put(app.uid, app.packageName);
+			if((app.flags & ApplicationInfo.FLAG_SYSTEM)!=0)
+				appNames.put(app.uid, app.packageName);
 		}
 
 		for (Integer uid : appNames.keySet()) {

@@ -1,5 +1,7 @@
 package vn.cybersoft.summerms.controllers;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,7 +16,29 @@ import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;*/
 
+
+
+
+
+
+
+
+
+
+
+
+import org.achartengine.ChartFactory;
+import org.achartengine.GraphicalView;
+import org.achartengine.chart.BarChart.Type;
+import org.achartengine.model.CategorySeries;
+import org.achartengine.model.XYMultipleSeriesDataset;
+import org.achartengine.renderer.SimpleSeriesRenderer;
+import org.achartengine.renderer.XYMultipleSeriesRenderer;
+import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
+
 import vn.cybersoft.summerms.R;
+import vn.cybersoft.summerms.model.DataMonitorHelper;
+import vn.cybersoft.summerms.model.DateTraffic;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.content.Context;
 import android.graphics.Color;
@@ -34,6 +58,8 @@ public class FragmentTotal extends Fragment{
 	private LinearLayout chartLayout;
 	private TrafficSnapshot current=null;
 	private int dayNumber;
+	private long dataMonth,dataToday,dataUp,dataDow;
+	private DataMonitorHelper dataMonitorHelper;
 	public FragmentTotal() {
 		// TODO Auto-generated constructor stub
 	}
@@ -41,18 +67,21 @@ public class FragmentTotal extends Fragment{
 			Bundle savedInstanceState) {
 		View rootView=inflater.inflate(R.layout.layout_fragment_daily_monitor, container,
 				false);
-		//getData();
+		dataMonitorHelper=new DataMonitorHelper(getActivity());
 		tvToday=(TextView) rootView.findViewById(R.id.tv_data_today);
 		tvThisMonth=(TextView) rootView.findViewById(R.id.tv_this_month);
 		tvRemaining=(TextView) rootView.findViewById(R.id.tv_remaining);
 		tvRemainingData=(TextView) rootView.findViewById(R.id.tv_remaining_1);
 		chartLayout=(LinearLayout) rootView.findViewById(R.id.chart_view);
-		
-		
-		
+		dataMonth=0;
+		dataToday=0;
+		dataUp=0;
+		dataDow=0;
+		getData();
+		setDataForTextView();
 		return rootView;
 	}
-	/*private void getData() {
+	private void getData() {
 		
 		current=new TrafficSnapshot(getActivity());
 		Calendar calendar = Calendar.getInstance();
@@ -60,12 +89,49 @@ public class FragmentTotal extends Fragment{
 		calendar.set(year, new Date().getMonth(), 2);
 		dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		Log.d("date",dayNumber+"");
+		ArrayList<DateTraffic> lsDateTraffic=new ArrayList<>();
+		lsDateTraffic=dataMonitorHelper.getDAY();
+		ArrayList<Double> datas =new ArrayList<>();
+		Log.d("Datas", lsDateTraffic.size()+"");
+		for (int i = 0; i < lsDateTraffic.size(); i++) {
+			long data=lsDateTraffic.get(i).getStartdownLoad()+lsDateTraffic.get(i).getStartupLoad();
+			data=data/(1024*1024);
+			datas.add((double)data);
+			
+			//set Data for textview
+			dataDow+=lsDateTraffic.get(i).getStartdownLoad();
+			dataUp+=lsDateTraffic.get(i).getStartupLoad();
+			Log.d("Datas", data+"");
+		}
+		dataMonth=(dataDow+dataUp);
+		dataToday=lsDateTraffic.get(new Date().getDate()-1).getStartdownLoad()+
+				lsDateTraffic.get(new Date().getDate()-1).getStartupLoad();
+		
+		execute(getActivity(), datas);
 	}
-	public void execute(Context context) {
+	public void setDataForTextView(){
+		String month = "",today="";
+		//month
+		if((dataMonth/(1024*1024))!=0){
+			month=dataMonth/(1024*1024)+" MB";
+		}else if((dataMonth/1024)!=0){
+			month=dataMonth/1024+" KB";
+		}
+		//today
+		if((dataToday/(1024*1024))!=0){
+			today=dataToday/(1024*1024)+" MB";
+		}else if((dataToday/1024)!=0){
+			today=dataToday/1024+" KB";
+		}
+		
+		tvThisMonth.setText(month);
+		tvToday.setText(today);
+		
+	}
+	public void execute(Context context,ArrayList<Double> datas) {
 		String[] titles = new String[] { "data" };
 		List<Double> values = new ArrayList<Double>();
 
-		
 		int color = Color.GREEN;
 		XYMultipleSeriesRenderer renderer = buildBarRenderer(color);
 		renderer.setOrientation(Orientation.HORIZONTAL);
@@ -74,17 +140,15 @@ public class FragmentTotal extends Fragment{
 		renderer.setXLabels(0);
 		renderer.setYLabels(10);
 		ArrayList<Double> data=new ArrayList<>();
-		for (int i = 1; i < dayNumber; i++) {
+		for (int i = 1; i <= dayNumber; i++) {
 
-			renderer.addXTextLabel(i, i+"/"+new Date().getMonth());
+			renderer.addXTextLabel(i, i+"/"+(new Date().getMonth()+1));
 			//data.add(object)
 		}
-		double[] s={25, 73, 120, 140, 220, 13, 6, 8, 12,24,
-				0, 6};
-		for (double d : s) {
+		
+		for (double d : datas) {
 			values.add(d);
 		}
-		//  GraphicalView graphicalView=ChartFactory.getLineChartView(getActivity(), dataset, multiRenderer) ;
 		GraphicalView graphicalView= ChartFactory.getBarChartView(context, buildBarDataset(titles, values), renderer,
 				Type.DEFAULT);
 		chartLayout.addView(graphicalView,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
@@ -111,6 +175,7 @@ public class FragmentTotal extends Fragment{
 				series.add(values.get(k));
 			}
 			dataset.addSeries(series.toXYSeries());
+			
 		}
 		return dataset;
 	}
@@ -118,7 +183,7 @@ public class FragmentTotal extends Fragment{
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 		renderer.setChartTitleTextSize(0);
 		renderer.setLabelsTextSize(20);
-		renderer.setBarWidth(15);
+		renderer.setBarWidth(20);
 		
 		renderer.setShowLegend(false);
 		renderer.setShowGridX(true);
@@ -130,9 +195,8 @@ public class FragmentTotal extends Fragment{
 		renderer.setMarginsColor(Color.WHITE);
 
 		renderer.setXLabelsColor(Color.RED);
-		renderer.setYLabelsPadding(5);
+		renderer.setYLabelsPadding(0);
 		renderer.setLabelsColor(Color.RED);
-		
 		renderer.setZoomButtonsVisible(false);
 		renderer.setInScroll(false);
 		renderer.setZoomEnabled(false, false);
@@ -140,13 +204,16 @@ public class FragmentTotal extends Fragment{
 		renderer.setPanEnabled(true, false);
 
 		SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-		r.setColor(color);
+		r.setColor(Color.GREEN);
 		r.setDisplayChartValues(true);
-		r.setChartValuesTextSize(30);
+		NumberFormat formatter;
+		formatter = new DecimalFormat("#'MB'");
+		r.setChartValuesFormat(formatter);
+		r.setChartValuesTextSize(25);
 		r.setChartValuesTextAlign(Align.CENTER);
 		
 		renderer.addSeriesRenderer(r);
 		renderer.setDisplayValues(false);
 		return renderer;
 	}
-*/}
+}

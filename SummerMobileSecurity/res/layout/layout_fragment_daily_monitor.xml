@@ -38,7 +38,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today:"
+                        android:text="@string/today"
                         android:textSize="17sp" />
 
                     <TextView
@@ -47,8 +47,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
-                        android:text="1MB"
-                        android:textSize="17sp" />
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -59,7 +59,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="This Month: "
+                        android:text="@string/this_month"
                         android:textSize="17sp" />
 
                     <TextView
@@ -68,8 +68,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
-                        android:text="15MB"
-                        android:textSize="17sp" />
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -81,7 +81,7 @@
                         android:id="@+id/tv_remaining"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Remaining:"
+                        android:text="@string/remaining"
                         android:textSize="17sp" />
 
                     <TextView
@@ -90,18 +90,18 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
-                        android:text="15MB"
-                        android:textSize="17sp" />
+                        android:textStyle="bold"
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <Button
                     android:id="@+id/bt_set"
-                    style="@android:style/ButtonBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="#8DDE59"
-                    android:text="Set Data Plant" />
+                    android:textColor="#ffffff"
+                    android:background="@drawable/custom_button_selector"
+                    android:text="@string/set_data_plant" />
             </LinearLayout>
         </LinearLayout>
 
@@ -117,7 +117,7 @@
                 android:layout_height="match_parent"
                 android:background="#ECEBEA"
                 android:gravity="center_vertical"
-                android:text="Daili data usage"
+                android:text="@string/daily"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
