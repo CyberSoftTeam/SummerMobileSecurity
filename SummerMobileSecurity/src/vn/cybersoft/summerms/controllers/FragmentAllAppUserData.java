@@ -2,8 +2,13 @@ package vn.cybersoft.summerms.controllers;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.SortedSet;
 
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.model.App;
@@ -23,7 +28,7 @@ public class FragmentAllAppUserData extends Fragment {
 	private TrafficSnapshot current=null;
 	private DataMonitorHelper dataHelper;
 	private ListView lsv;
-	private ArrayList<App> dataset;
+	private List<App> dataset;
 	public FragmentAllAppUserData()  {
 		// TODO Auto-generated constructor stub
 	}
@@ -72,10 +77,17 @@ public class FragmentAllAppUserData extends Fragment {
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
 				if (result) {
-					lsv.setAdapter(new AppAdapter(getActivity(), R.layout.layout_item_app_monitor, dataset));
+					Collections.sort(dataset, new CustomComparator());
+					lsv.setAdapter(new AppAdapter(getActivity(), R.layout.layout_item_app_monitor,(ArrayList<App>) dataset));
 				}
 			}
 		};
 		task.execute();
+	}
+	public class CustomComparator implements Comparator<App> {
+	    @Override
+	    public int compare(App o1, App o2) {
+	        return (int) ((int)((o2.getLaststartupLoad()+o2.getLaststartdownLoad())-o1.getLaststartdownLoad()+o1.getLaststartupLoad()));
+	    }
 	}
 }

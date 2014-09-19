@@ -1,82 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:layout_height="wrap_content"
     android:layout_margin="15dp"
-    android:orientation="horizontal" >
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp" >
 
     <LinearLayout
-        android:layout_weight="0.88"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-        <ImageView
-            android:id="@+id/image_app"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginLeft="10dp"
-        android:layout_weight="0.12"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent" >
-            <TextView
-                android:id="@+id/tv_app_name"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"
+            android:layout_height="match_parent"
+            android:layout_weight="0.88"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/image_app"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Facebook" />
+                android:src="@drawable/ic_launcher" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvTotal"
-                android:textSize="18sp"
-                android:textColor="@android:color/black"
-                android:layout_width="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_height="wrap_content"
-                android:text="20.6MB" />
-            
-        </RelativeLayout>
-
-         <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent" >
-            <TextView
-                android:id="@+id/tv_upload"
-                android:textStyle="italic"
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upload: 16K" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0.12"
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/tv_download"
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:textStyle="italic"
-                android:layout_width="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_height="wrap_content"
-                android:text="Download: 20.6MB" />
-            
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
+                <TextView
+                    android:id="@+id/tv_app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical" >
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                 >
+
+                <TextView
+                    android:id="@+id/tv_upload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

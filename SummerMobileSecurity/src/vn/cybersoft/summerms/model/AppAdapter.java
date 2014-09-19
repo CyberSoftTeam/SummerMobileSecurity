@@ -1,5 +1,7 @@
 package vn.cybersoft.summerms.model;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import vn.cybersoft.summerms.R;
@@ -13,11 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class AppAdapter extends ArrayAdapter<App>{
 	private Context mContext;
 	private int id;
+	private long maxData;
 	private ArrayList<App> apps=new ArrayList<App>();
 	
 	public AppAdapter(Context context, int resource, ArrayList<App> objects) {
@@ -25,6 +29,9 @@ public class AppAdapter extends ArrayAdapter<App>{
 		mContext=context;
 		apps=(ArrayList<App>) objects;
 		id=resource;
+		if(apps!=null){
+			maxData=apps.get(0).getLaststartdownLoad()+apps.get(0).getLaststartupLoad();
+		}
 	}
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -36,31 +43,39 @@ public class AppAdapter extends ArrayAdapter<App>{
 		TextView tvUpLoad=(TextView) convertView.findViewById(R.id.tv_upload);
 		TextView tvDownLoad=(TextView) convertView.findViewById(R.id.tv_download);
 		ImageView img=(ImageView) convertView.findViewById(R.id.image_app);
+		ProgressBar progressBar=(ProgressBar) convertView.findViewById(R.id.progressBar);
+		
 
 		String total;
 		String up;
 		String dow;
+		NumberFormat formatter;
+		long a;
+		formatter = new DecimalFormat("#.#");
 		if((apps.get(position).getLaststartdownLoad()/(1024*1024))!=0){
-			dow= (double)(apps.get(position).getLaststartdownLoad()/(1024*1024))*1.010d+"00000";
-			dow=dow.substring(0, 5)+"MB";
+			a=(apps.get(position).getLaststartdownLoad()/(1024*1024));
+			dow=formatter.format(a)+"MB";
 		}else{
-			dow=(double) (apps.get(position).getLaststartdownLoad()/1024)*1.010d+"00000";
-			dow=dow.substring(0, 5)+"KB";
+			a=apps.get(position).getLaststartdownLoad()/1024;
+			dow=formatter.format(a)+"KB";
 		}
 		if((apps.get(position).getLaststartupLoad()/(1024*1024))!=0){
-			up= (double)(apps.get(position).getLaststartupLoad()/(1024*1024))*1.010d+"00000";
-			up=up.substring(0, 5)+"MB";//10.25
+			a= apps.get(position).getLaststartupLoad()/(1024*1024);
+			up=formatter.format(a)+"MB";
 		}else{
-			up=(double) (apps.get(position).getLaststartupLoad()/1024)*1.010d+"00000";
-			up=up.substring(0, 5)+"KB";
+			a=apps.get(position).getLaststartupLoad()/1024;
+			up=formatter.format(a)+"KB";
 		}
+		
 		long x=apps.get(position).getLaststartdownLoad()+apps.get(position).getLaststartupLoad();
+		progressBar.setMax((int)maxData);
+		progressBar.setProgress((int) x);
 		if((x/(1024*1024))!=0){
-			total= (double)(x/(1024*1024))*1.010d+"00000";
-			total=total.substring(0, 5)+"MB";
+			x=x/(1024*1024);
+			total=formatter.format(x)+"MB";
 		}else{
-			total=(double) (x/1024)*1.010d+"00000";
-			total=total.substring(0, 5)+"KB";
+			x=(x/1024);
+			total=formatter.format(x)+"KB";
 		}
 		ApplicationInfo applicationInfo;
 		String name="";

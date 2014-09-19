@@ -43,8 +43,10 @@
     <!-- Error messages -->
     <string name="invalid_pin">Your PIN is invalid</string>
     <string name="unmatch_pin">Two PIN value is not match</string>
+    <!-- DataMonitor -->
     <string name="daily">Daily data usage</string>
     <string name="today">Today:</string>
+    <string name="mb"> MB</string>
     <string name="this_month">This Month: </string>
     <string name="remaining">Remaining:</string>
     <string name="set_data_plant">Set data plan</string>
