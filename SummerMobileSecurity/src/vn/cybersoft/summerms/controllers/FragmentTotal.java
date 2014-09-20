@@ -1,14 +1,25 @@
+/*******************************************************************************
+ * Copyright 2014 IUH.CyberSoft Team (http://cyberso.wordpress.com/)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package vn.cybersoft.summerms.controllers;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-
-
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -26,7 +37,6 @@ import vn.cybersoft.summerms.model.DateTraffic;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
@@ -131,12 +141,12 @@ public class FragmentTotal extends Fragment{
 		new TrafficSnapshot(getActivity());
 		Calendar calendar = Calendar.getInstance();
 		int year=calendar.get(Calendar.YEAR);
-		calendar.set(year, new Date().getMonth(), 2);
+		calendar.set(year, Calendar.getInstance().get(Calendar.MONTH), 2);
 		dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		Log.d("date",dayNumber+"");
-		ArrayList<DateTraffic> lsDateTraffic=new ArrayList<>();
+		ArrayList<DateTraffic> lsDateTraffic=new ArrayList<DateTraffic>();
 		lsDateTraffic=dataMonitorHelper.getDAY();
-		ArrayList<Double> datas =new ArrayList<>();
+		ArrayList<Double> datas =new ArrayList<Double>();
 		Log.d("Datas", lsDateTraffic.size()+"");
 		for (int i = 0; i < lsDateTraffic.size(); i++) {
 			long data=lsDateTraffic.get(i).getStartdownLoad()+lsDateTraffic.get(i).getStartupLoad();
@@ -149,8 +159,8 @@ public class FragmentTotal extends Fragment{
 			Log.d("Datas", data+"");
 		}
 		dataMonth=(dataDow+dataUp);
-		dataToday=lsDateTraffic.get(new Date().getDate()-1).getStartdownLoad()+
-				lsDateTraffic.get(new Date().getDate()-1).getStartupLoad();
+		dataToday=lsDateTraffic.get(Calendar.getInstance().get(Calendar.DATE)-1).getStartdownLoad()+
+				lsDateTraffic.get(Calendar.getInstance().get(Calendar.DATE)-1).getStartupLoad();
 
 		execute(getActivity(), datas);
 	}
@@ -184,7 +194,7 @@ public class FragmentTotal extends Fragment{
 		renderer.setYLabels(10);
 		for (int i = 1; i <= dayNumber; i++) {
 
-			renderer.addXTextLabel(i, i+"/"+(new Date().getMonth()+1));
+			renderer.addXTextLabel(i, i+"/"+(Calendar.getInstance().get(Calendar.MONTH)+1));
 			//data.add(object)
 		}
 
