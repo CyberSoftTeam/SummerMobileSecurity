@@ -6,8 +6,13 @@
     
     <dimen name="slidingmenu_offset">60dp</dimen>
     <dimen name="list_padding">10dp</dimen>
-    <dimen name="padding">5dp</dimen>
+    <dimen name="padding">10dp</dimen>
     <dimen name="config_padding">15dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
-    
+      <!-- Define some key view padding values. This is useful because the values can be used in
+         multiple views and changed from one central location. It also gives us the ability to
+         provide alternate values for different device configurations using resource directory
+         qualifiers. -->
+    <dimen name="padding_con">16dp</dimen>
+    <dimen name="listview_item_padding">16dp</dimen>
 </resources>
