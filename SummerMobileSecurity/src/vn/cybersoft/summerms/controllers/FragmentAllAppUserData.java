@@ -91,7 +91,7 @@ public class FragmentAllAppUserData extends Fragment {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				if (result) {
+				if (result&&dataset.size()!=0) {
 					Collections.sort(dataset, new CustomComparator());
 					lsv.setAdapter(new AppAdapter(getActivity(), R.layout.layout_item_app_monitor,(ArrayList<App>) dataset));
 				}
