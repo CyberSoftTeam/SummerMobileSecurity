@@ -20,6 +20,7 @@ import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.controllers.ContactsListFragment.OnContactsInteractionListener;
 import vn.cybersoft.summerms.services.AppLockerService;
 import vn.cybersoft.summerms.utils.StringUtil;
+import android.R.string;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -108,14 +109,18 @@ public class MainActivity extends MainBaseActivity implements OnContactsInteract
 	
 	@Override
 	public void onContactSelected(Uri contactUri) {
-		Log.d(this.getLocalClassName(), " onContactSelected");
+		Log.d(this.getLocalClassName(), " onContactSelected  " + contactUri.toString());
+		String [] s = contactUri.toString().split("/");
+		if (s[4].equals("lookup")) {
+			mContactDetailFragment = ContactDetailFragment.newInstance(contactUri);
+			switchContent(mContactDetailFragment);
+		}
 		// Otherwise single pane layout, start a new ContactDetailActivity with
 		// the contact Uri
 		/* Intent intent = new Intent(this, ContactDetailActivity.class);
 	            intent.setData(contactUri);
 	            startActivity(intent);*/
-		mContactDetailFragment = ContactDetailFragment.newInstance(contactUri);
-		switchContent(mContactDetailFragment);
+		
 	}
 
 	@Override

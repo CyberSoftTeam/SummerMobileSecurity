@@ -277,6 +277,7 @@ public class ContactsListFragment extends ListFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+    	Log.i("on item click"," on item click");
         // Gets the Cursor object currently bound to the ListView
         final Cursor cursor = mAdapter.getCursor();
 
@@ -323,6 +324,7 @@ public class ContactsListFragment extends ListFragment implements
 
         // Inflate the menu items
         inflater.inflate(R.menu.contact_list_menu, menu);
+        
         // Locate the search item
         MenuItem searchItem = menu.findItem(R.id.menu_search);
 
@@ -379,9 +381,14 @@ public class ContactsListFragment extends ListFragment implements
                     // Restarts the loader. This triggers onCreateLoader(), which builds the
                     // necessary content Uri from mSearchTerm.
                     mSearchQueryChanged = true;
-                    getLoaderManager().restartLoader(
-                            ContactsQuery.QUERY_ID, null, ContactsListFragment.this);
-                    return true;
+                    try {
+						getLoaderManager().restartLoader(
+								ContactsQuery.QUERY_ID, null,
+								ContactsListFragment.this);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return true;
                 }
             });
 
