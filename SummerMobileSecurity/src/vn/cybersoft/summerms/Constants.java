@@ -22,7 +22,7 @@ import android.os.Environment;
 public class Constants {
 	public static final String TAG = "SummerMobileSecurity";
 	public static final String TAG_SOUND_DETECT = "detect";
-
+	public static final boolean DEBUG = true;
 	public static final String NEW_LINE = "\n";
 	public static final String STRING_CONNECTER = " - ";
 	public static final String UNDERSCORE = "_";

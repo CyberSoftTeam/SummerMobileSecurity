@@ -17,19 +17,31 @@ package vn.cybersoft.summerms.controllers;
 
 import vn.cybersoft.summerms.Preferences;
 import vn.cybersoft.summerms.R;
+import vn.cybersoft.summerms.controllers.ContactsListFragment.OnContactsInteractionListener;
 import vn.cybersoft.summerms.services.AppLockerService;
 import vn.cybersoft.summerms.utils.StringUtil;
+import android.R.string;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-public class MainActivity extends MainBaseActivity {
+public class MainActivity extends MainBaseActivity implements OnContactsInteractionListener {
 	private Fragment mContent;
+
+	private ContactDetailFragment mContactDetailFragment;
+
+	// If true, this is a larger screen device which fits two panes
+	private boolean isTwoPaneLayout;
+
+	// True if this activity instance is a search result view (used on pre-HC devices that load
+	// search results in a separate instance of the activity rather than loading results in-line
+	// as the query is typed.
+	private boolean isSearchResultView = false;
 
 	public MainActivity() {
 		super(R.string.app_name);
@@ -96,6 +108,38 @@ public class MainActivity extends MainBaseActivity {
 	}
 	
 	@Override
+	public void onContactSelected(Uri contactUri) {
+		Log.d(this.getLocalClassName(), " onContactSelected  " + contactUri.toString());
+		String [] s = contactUri.toString().split("/");
+		if (s[4].equals("lookup")) {
+			mContactDetailFragment = ContactDetailFragment.newInstance(contactUri);
+			switchContent(mContactDetailFragment);
+		}
+		// Otherwise single pane layout, start a new ContactDetailActivity with
+		// the contact Uri
+		/* Intent intent = new Intent(this, ContactDetailActivity.class);
+	            intent.setData(contactUri);
+	            startActivity(intent);*/
+		
+	}
+
+	@Override
+	public void onSelectionCleared() {
+		//if (Constants.DEBUG) {
+		Log.d(this.getLocalClassName(), "on selection cleared");
+		//}
+		if (isTwoPaneLayout && mContactDetailFragment != null) {
+			mContactDetailFragment.setContact(null);
+		}
+	}
+
+	@Override
+	public boolean onSearchRequested() {
+		// Don't allow another search if this activity instance is already showing
+		// search results. Only used pre-HC.
+		return !isSearchResultView && super.onSearchRequested();
+	}
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.main, menu);
@@ -111,5 +155,5 @@ public class MainActivity extends MainBaseActivity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}*/
 }

@@ -18,6 +18,8 @@ package vn.cybersoft.summerms;
 import java.util.HashSet;
 import java.util.Set;
 
+import vn.cybersoft.summerms.database.DatabaseContact;
+
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -31,14 +33,16 @@ public class Preferences extends Application {
 
 	private SharedPreferences preferences;
 	private static Preferences pre;
-
+	
+	private DatabaseContact datacontact; 
+	
 	@SuppressLint("UseSparseArrays")
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		pre = this;
 		preferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-
+		datacontact = new DatabaseContact();
 	}
 
 	/**
@@ -49,7 +53,14 @@ public class Preferences extends Application {
 	public static Preferences getInstance() {
 		return pre;
 	}
-
+	
+	/**
+	 * 
+	 */
+	public DatabaseContact getDatabaseContact(){
+		return datacontact;
+	}
+	
 	/**
 	 * Save state of an application
 	 * 

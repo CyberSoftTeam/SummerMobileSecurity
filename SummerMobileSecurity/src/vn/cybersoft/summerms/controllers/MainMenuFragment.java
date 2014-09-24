@@ -66,6 +66,7 @@ public class MainMenuFragment extends ListFragment {
 			newContent=new FragmentDataMonitor();
 			break;
 		case BLOCKER:
+			newContent = new ContactsListFragment();
 			break;
 		case VIRUS_SCANNER:
 			break;
