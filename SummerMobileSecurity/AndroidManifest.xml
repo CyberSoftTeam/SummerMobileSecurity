@@ -82,6 +82,13 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        <receiver android:name="vn.cybersoft.summerms.services.MyScheduleReceiver" />
+          <receiver android:name="vn.cybersoft.summerms.services.MyBootReceiver"
+                android:enabled="true">
+            <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

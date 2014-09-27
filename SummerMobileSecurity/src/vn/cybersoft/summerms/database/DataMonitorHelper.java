@@ -206,5 +206,6 @@ public class DataMonitorHelper extends SQLiteOpenHelper{
 	public void deteleAllTable(){
 		SQLiteDatabase db=getWritableDatabase();
 		db.delete(TABLE_DAY, null, null);
+		db.delete(TABLE_APP, null, null);
 	}
 }

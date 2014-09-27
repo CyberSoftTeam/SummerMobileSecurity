@@ -22,6 +22,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.achartengine.ChartFactory;
@@ -36,7 +38,9 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.database.DataMonitorHelper;
+import vn.cybersoft.summerms.model.App;
 import vn.cybersoft.summerms.model.DateTraffic;
+import vn.cybersoft.summerms.model.TrafficRecord;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.app.Dialog;
 import android.content.Context;
@@ -59,16 +63,21 @@ public class FragmentTotal extends Fragment{
 	private TextView tvToday,tvThisMonth,tvRemainingData;
 	private LinearLayout chartLayout,chartRemining;
 	private Button btSetDataPlan;
+	public static String TAG="FragmentTotal";
 	private int dayNumber;
 	private long dataMonth,dataToday,dataUp,dataDow,max,dataset;
-	private DataMonitorHelper dataMonitorHelper;
+	private TrafficSnapshot latest=null;
+	private DataMonitorHelper dataHelper;
 	public FragmentTotal() {
 	}
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView=inflater.inflate(R.layout.layout_fragment_daily_monitor, container,
 				false);
-		dataMonitorHelper=new DataMonitorHelper(getActivity());
+		
+		dataHelper=new DataMonitorHelper(getActivity());
+		getData();
 		tvToday=(TextView) rootView.findViewById(R.id.tv_data_today);
 		tvThisMonth=(TextView) rootView.findViewById(R.id.tv_this_month);
 		tvRemainingData=(TextView) rootView.findViewById(R.id.tv_remaining_1);
@@ -82,7 +91,7 @@ public class FragmentTotal extends Fragment{
 		dataToday=0;
 		dataUp=0;
 		dataDow=0;
-		getData();
+		SaveData();
 		setDataForTextView();
 		long plan=getSharedPreferences();
 		Log.d("data", dataMonth+"-"+plan);
@@ -138,7 +147,7 @@ public class FragmentTotal extends Fragment{
 		});
 		return rootView;
 	}
-	private void getData() {
+	private void SaveData() {
 
 		new TrafficSnapshot(getActivity());
 		Calendar calendar = Calendar.getInstance();
@@ -147,7 +156,7 @@ public class FragmentTotal extends Fragment{
 		dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		Log.d("date",dayNumber+"");
 		ArrayList<DateTraffic> lsDateTraffic=new ArrayList<DateTraffic>();
-		lsDateTraffic=dataMonitorHelper.getDAY();
+		lsDateTraffic=dataHelper.getDAY();
 		ArrayList<Double> datas =new ArrayList<Double>();
 		Log.d("Datas", lsDateTraffic.size()+"");
 		for (int i = 0; i < lsDateTraffic.size(); i++) {
@@ -346,4 +355,60 @@ public class FragmentTotal extends Fragment{
 		}
 		return 1;
 	}
+	
+	@SuppressWarnings("deprecation")
+	private void getData() {
+		latest=new TrafficSnapshot(getActivity());
+		DateTraffic dateTraffic=new DateTraffic();
+		dateTraffic=dataHelper.getDAY((new Date().getDate()-1)+"."+(new Date().getMonth()+1));
+		if((new Date().getDate()>1)&&(dateTraffic.getDate() != null)){
+				long dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
+				long dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
+				dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
+				Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+dateTraffic.getDate());
+		}else{
+			Log.d(TAG, "mis");
+			dataHelper.deteleAllTable();
+			dataHelper=new DataMonitorHelper(getActivity());
+			
+			Calendar calendar = Calendar.getInstance();
+			int year=calendar.get(Calendar.YEAR);
+			calendar.set(year, new Date().getMonth(), 2);
+			int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+			for (int i = 1; i <(new Date().getDate()); i++) {
+				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+					Log.d(TAG, "Add Day1-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+				}
+			}
+			if(dataHelper.addDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()))!=-1){
+				Log.d(TAG, "Add Day-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+			}
+			for (int i = (new Date().getDate())+1; i <=dayNumber; i++) {
+				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+					Log.d(TAG, "Add Day2-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+				}
+			}
+			//app
+		}
+
+		HashSet<Integer> intersection=new HashSet<Integer>(latest.getApps().keySet());
+		for (Integer uid : intersection) {
+			TrafficRecord latest_rec=latest.getApps().get(uid);
+			addAppData(uid,latest_rec.getTag(), latest_rec);
+		}
+
+	}
+	private void addAppData(int uid,CharSequence name, TrafficRecord latest_rec) {
+		if (latest_rec.getRx()>-1 || latest_rec.getTx()>-1) {
+			App app =new App();
+			app.setAppid(uid);
+			app.setAppName(name.toString());
+			app.setLaststartdownLoad(0);
+			app.setLaststartupLoad(0);
+			app.setStartdownLoad(latest_rec.getRx());
+			app.setStartupLoad(latest_rec.getTx());
+			if(!dataHelper.isAppContain(uid)) dataHelper.addApp(app);
+		}
+	}
+
 }

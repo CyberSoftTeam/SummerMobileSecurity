@@ -19,6 +19,7 @@ import vn.cybersoft.summerms.Preferences;
 import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.controllers.ContactsListFragment.OnContactsInteractionListener;
 import vn.cybersoft.summerms.services.AppLockerService;
+import vn.cybersoft.summerms.services.MyScheduleReceiver;
 import vn.cybersoft.summerms.utils.StringUtil;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,7 +32,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends MainBaseActivity implements OnContactsInteractionListener {
 	private Fragment mContent;
-
+	private MyScheduleReceiver alarm = new MyScheduleReceiver();
 	private ContactDetailFragment mContactDetailFragment;
 
 	// If true, this is a larger screen device which fits two panes
@@ -50,12 +51,12 @@ public class MainActivity extends MainBaseActivity implements OnContactsInteract
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		alarm.setAlarm(this);
 		if (StringUtil.isEmptyOrNull(Preferences.getInstance().getPIN())) {
 			Intent initPin = new Intent(this, InitPINActivity.class);
 			startActivity(initPin);
 		}
-		
+		 
 		// set the Above View
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");

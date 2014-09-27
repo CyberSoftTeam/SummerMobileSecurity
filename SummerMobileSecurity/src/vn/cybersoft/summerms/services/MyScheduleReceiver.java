@@ -1,0 +1,96 @@
+package vn.cybersoft.summerms.services;
+import java.util.Calendar;
+
+
+
+import java.util.Date;
+
+import vn.cybersoft.summerms.database.DataMonitorHelper;
+import vn.cybersoft.summerms.model.DateTraffic;
+import vn.cybersoft.summerms.model.TrafficSnapshot;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.util.Log;
+import android.widget.Toast;
+
+public class MyScheduleReceiver extends BroadcastReceiver {
+	public static final String TAG="MyScheduleReceiver";
+	private TrafficSnapshot latest=null;
+	private DataMonitorHelper dataHelper;
+	// restart service every 30 seconds
+	private AlarmManager alarmMgr;
+	private PendingIntent alarmIntent;
+	private Context mContext;
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		mContext=context;
+		dataHelper=new DataMonitorHelper(mContext);
+		Log.d(TAG, "Start Traffic Day");
+		getData();
+	}
+	@SuppressWarnings("deprecation")
+	private void getData() {
+		latest=new TrafficSnapshot(mContext);
+		DateTraffic dateTraffic=new DateTraffic();
+		dateTraffic=dataHelper.getDAY((new Date().getDate()-1)+"."+(new Date().getMonth()+1));
+		if((new Date().getDate()>1)&&(dateTraffic.getDate() != null)){
+			long dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
+			long dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
+			dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
+			Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+dateTraffic.getDate());
+		}else{
+			Log.d(TAG, "mis");
+			dataHelper.deteleAllTable();
+			dataHelper=new DataMonitorHelper(mContext);
+			Calendar calendar = Calendar.getInstance();
+			int year=calendar.get(Calendar.YEAR);
+			calendar.set(year, new Date().getMonth(), 2);
+			int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+			for (int i = 1; i <(new Date().getDate()); i++) {
+				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+					Log.d(TAG, "Add Day1-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+				}
+			}
+			if(dataHelper.addDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()))!=-1){
+				Log.d(TAG, "Add Day-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+			}
+			for (int i = (new Date().getDate())+1; i <=dayNumber; i++) {
+				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+					Log.d(TAG, "Add Day2-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
+				}
+			}
+
+		}
+
+
+
+	}
+	public void setAlarm(Context context) {
+		alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(context, MyScheduleReceiver.class);
+		alarmIntent = PendingIntent.getBroadcast(context, 0, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		// Set the alarm's trigger time to 00:30 a.m.
+		calendar.set(Calendar.HOUR_OF_DAY, 1);
+		calendar.set(Calendar.MINUTE, 01);
+		alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,  
+				calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, alarmIntent);
+
+		// Enable {@code SampleBootReceiver} to automatically restart the alarm when the
+		// device is rebooted.
+		ComponentName receiver = new ComponentName(context, MyBootReceiver.class);
+		PackageManager pm = context.getPackageManager();
+
+		pm.setComponentEnabledSetting(receiver,
+				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+				PackageManager.DONT_KILL_APP);           
+	}
+} 
