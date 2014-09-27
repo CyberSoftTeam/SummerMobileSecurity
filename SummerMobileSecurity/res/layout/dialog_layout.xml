@@ -57,7 +57,7 @@
                 android:layout_weight="0.5"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:background="@drawable/custom_button_selector"
+                android:background="#3B5DE5"
                 android:text="@string/btn_ok" />
 
             <Button
@@ -68,7 +68,7 @@
                 android:layout_weight="0.5"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
-                android:background="@drawable/custom_button_selector"
+                android:background="#3B5DE5"
                 android:text="@string/btn_cancel" />
         </LinearLayout>
     </LinearLayout>

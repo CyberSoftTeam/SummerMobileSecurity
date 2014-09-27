@@ -13,7 +13,9 @@
  */
 
 package vn.cybersoft.summerms.model;
-
+/**
+ * @author Phạm Văn Năm
+ */
 import java.util.HashMap;
 import android.annotation.SuppressLint;
 import android.content.Context;

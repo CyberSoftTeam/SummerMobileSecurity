@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package vn.cybersoft.summerms.controllers;
 
+package vn.cybersoft.summerms.controllers;
+/**
+ * @author Phạm Văn Năm
+ */
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.SortedSet;
 
 import vn.cybersoft.summerms.R;
+import vn.cybersoft.summerms.database.DataMonitorHelper;
 import vn.cybersoft.summerms.model.App;
 import vn.cybersoft.summerms.model.AppAdapter;
-import vn.cybersoft.summerms.model.DataMonitorHelper;
 import vn.cybersoft.summerms.model.TrafficRecord;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import vn.cybersoft.summerms.tasks.TimeConsumeTask;

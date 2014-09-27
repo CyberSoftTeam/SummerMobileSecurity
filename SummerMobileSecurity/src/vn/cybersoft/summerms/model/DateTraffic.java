@@ -14,7 +14,9 @@
  * limitations under the License.
  ******************************************************************************/
 package vn.cybersoft.summerms.model;
-
+/**
+ * @author Phạm Văn Năm
+ */
 public class DateTraffic {
 	private String date ;
 	private long startupLoad;

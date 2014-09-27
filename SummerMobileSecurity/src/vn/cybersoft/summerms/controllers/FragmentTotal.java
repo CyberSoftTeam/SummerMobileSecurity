@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package vn.cybersoft.summerms.controllers;
 
+package vn.cybersoft.summerms.controllers;
+/**
+ * @author Phạm Văn Năm
+ */
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,7 +35,7 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 
 import vn.cybersoft.summerms.R;
-import vn.cybersoft.summerms.model.DataMonitorHelper;
+import vn.cybersoft.summerms.database.DataMonitorHelper;
 import vn.cybersoft.summerms.model.DateTraffic;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.app.Dialog;
@@ -53,7 +56,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FragmentTotal extends Fragment{
-	private TextView tvToday,tvThisMonth,tvRemaining,tvRemainingData;
+	private TextView tvToday,tvThisMonth,tvRemainingData;
 	private LinearLayout chartLayout,chartRemining;
 	private Button btSetDataPlan;
 	private int dayNumber;
@@ -68,7 +71,6 @@ public class FragmentTotal extends Fragment{
 		dataMonitorHelper=new DataMonitorHelper(getActivity());
 		tvToday=(TextView) rootView.findViewById(R.id.tv_data_today);
 		tvThisMonth=(TextView) rootView.findViewById(R.id.tv_this_month);
-		tvRemaining=(TextView) rootView.findViewById(R.id.tv_remaining);
 		tvRemainingData=(TextView) rootView.findViewById(R.id.tv_remaining_1);
 		chartLayout=(LinearLayout) rootView.findViewById(R.id.chart_view);
 		chartRemining=(LinearLayout) rootView.findViewById(R.id.chartRemining);
@@ -86,7 +88,7 @@ public class FragmentTotal extends Fragment{
 		Log.d("data", dataMonth+"-"+plan);
 		if(plan!=1 && (dataMonth/(1024*1024))<plan){
 			tvRemainingData.setText((plan-dataMonth/(1024*1024))+" MB");
-			tvRemainingData.setTextColor(Color.BLUE);
+			tvRemainingData.setTextColor(Color.GREEN);//Color.parseColor("#3B5DE5")
 			DrawPieChart(dataUp/(1024*1024),dataDow/(1024*1024),plan);
 		}else{
 			tvRemainingData.setText((plan-dataMonth/(1024*1024))+" MB");
@@ -112,12 +114,12 @@ public class FragmentTotal extends Fragment{
 						long data=dataset-dataMonth/(1024*1024);
 						tvRemainingData.setText(data+" MB");
 						if(dataset!=1 && (dataMonth/(1024*1024))<dataset){
-							tvRemainingData.setTextColor(Color.BLUE);
-							chartLayout.refreshDrawableState();
+							tvRemainingData.setTextColor(Color.GREEN);
+							chartRemining.removeAllViewsInLayout();
 							DrawPieChart(dataUp/(1024*1024),dataDow/(1024*1024),dataset);
 						}else{
-							chartLayout.refreshDrawableState();
 							tvRemainingData.setTextColor(Color.RED);
+							chartRemining.removeAllViewsInLayout();
 							DrawPieChart(dataUp/(1024*1024),dataDow/(1024*1024),dataUp/(1024*1024)+dataDow/(1024*1024));
 						}
 						putSharedPreferences(dataset);
@@ -182,6 +184,7 @@ public class FragmentTotal extends Fragment{
 		tvToday.setText(today);
 
 	}
+	@SuppressWarnings("deprecation")
 	public void execute(Context context,ArrayList<Double> datas) {
 		String[] titles = new String[] { "data" };
 		List<Double> values = new ArrayList<Double>();
@@ -256,7 +259,7 @@ public class FragmentTotal extends Fragment{
 		renderer.setPanEnabled(true, false);
 
 		SimpleSeriesRenderer r = new SimpleSeriesRenderer();
-		r.setColor(Color.GREEN);
+		r.setColor(Color.parseColor("#3B5DE5"));
 		r.setDisplayChartValues(true);
 		NumberFormat formatter;
 		formatter = new DecimalFormat("#'MB'");
@@ -271,20 +274,27 @@ public class FragmentTotal extends Fragment{
 	/*
 	 * chart Remining
 	 * */
+	@SuppressWarnings("deprecation")
 	private void DrawPieChart(double up,double dow,double plan){
-		double[] values = new double[] {100-((dow*100)/plan+(up*100)/plan),(dow*100)/plan,(up*100)/plan};
-		int[] colors = new int[] { Color.GREEN, Color.parseColor("#E5EF06"), Color.parseColor("#3C7FC6")};
+		NumberFormat formatter;
+		formatter = new DecimalFormat("#.#");
+		double dow1=Double.parseDouble(formatter.format((dow*100)/plan));
+		double up1=Double.parseDouble(formatter.format((up*100)/plan));
+		double rem1=100-(dow1+up1);
+		double[] values = new double[] {rem1,dow1,up1};
+		int[] colors = new int[] { Color.GREEN,Color.parseColor("#3B5DE5") , Color.YELLOW};
 		DefaultRenderer renderer = buildCategoryRenderer(colors);
 		renderer.setZoomButtonsVisible(false);
 		renderer.setZoomEnabled(true);
 		renderer.setChartTitleTextSize(0);
 		renderer.setDisplayValues(true);
+		renderer.setZoomEnabled(false);
 		renderer.setShowLabels(false);
 		renderer.setShowLegend(false);
 		SimpleSeriesRenderer r = renderer.getSeriesRendererAt(0);
-		r.setGradientEnabled(true);
+		/*r.setGradientEnabled(true);
 		r.setGradientStart(0, Color.WHITE);
-		r.setGradientStop(0, Color.GREEN);
+		r.setGradientStop(0, Color.GREEN);*/
 		r.setHighlighted(true);
 		GraphicalView graphicalView=  ChartFactory.getPieChartView(
 				getActivity(), buildCategoryDataset("Project budget", values), renderer);

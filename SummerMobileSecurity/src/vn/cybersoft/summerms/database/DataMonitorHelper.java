@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-package vn.cybersoft.summerms.model;
+package vn.cybersoft.summerms.database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import vn.cybersoft.summerms.Constants;
+import vn.cybersoft.summerms.model.App;
+import vn.cybersoft.summerms.model.DateTraffic;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

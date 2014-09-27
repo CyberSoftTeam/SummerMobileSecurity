@@ -94,6 +94,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="10dp"
                         android:textSize="20sp"
+                        android:textColor="#3B5DE5"
                         android:textStyle="bold" />
                 </RelativeLayout>
 
@@ -101,7 +102,7 @@
                     android:id="@+id/bt_set"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/custom_button_selector"
+                    android:background="#3B5DE5"
                     android:text="@string/set_data_plant"
                     android:textColor="#ffffff" />
             </LinearLayout>

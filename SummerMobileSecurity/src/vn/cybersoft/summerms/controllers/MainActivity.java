@@ -20,7 +20,6 @@ import vn.cybersoft.summerms.R;
 import vn.cybersoft.summerms.controllers.ContactsListFragment.OnContactsInteractionListener;
 import vn.cybersoft.summerms.services.AppLockerService;
 import vn.cybersoft.summerms.utils.StringUtil;
-import android.R.string;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

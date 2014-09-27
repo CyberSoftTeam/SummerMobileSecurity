@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/vn/cybersoft/summerms/controllers/FragmentAllAppUserData.java=UTF-8
+encoding//src/vn/cybersoft/summerms/controllers/FragmentDataMonitor.java=UTF-8
+encoding//src/vn/cybersoft/summerms/controllers/FragmentTotal.java=UTF-8
+encoding//src/vn/cybersoft/summerms/model/App.java=UTF-8
+encoding//src/vn/cybersoft/summerms/model/AppAdapter.java=UTF-8
+encoding//src/vn/cybersoft/summerms/model/DateTraffic.java=UTF-8
+encoding//src/vn/cybersoft/summerms/model/TrafficRecord.java=UTF-8
+encoding//src/vn/cybersoft/summerms/model/TrafficSnapshot.java=UTF-8

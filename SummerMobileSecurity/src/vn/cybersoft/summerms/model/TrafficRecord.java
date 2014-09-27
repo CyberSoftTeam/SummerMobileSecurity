@@ -13,7 +13,9 @@
 */
 
 package vn.cybersoft.summerms.model;
-
+/**
+ * @author Phạm Văn Năm
+ */
 import android.net.TrafficStats;
 
 public class TrafficRecord {

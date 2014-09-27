@@ -14,7 +14,9 @@
  * limitations under the License.
  ******************************************************************************/
 package vn.cybersoft.summerms.model;
-
+/**
+ * @author Phạm Văn Năm
+ */
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
