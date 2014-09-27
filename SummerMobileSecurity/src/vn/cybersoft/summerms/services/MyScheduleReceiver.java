@@ -4,9 +4,12 @@ import java.util.Calendar;
 
 
 import java.util.Date;
+import java.util.HashSet;
 
 import vn.cybersoft.summerms.database.DataMonitorHelper;
+import vn.cybersoft.summerms.model.App;
 import vn.cybersoft.summerms.model.DateTraffic;
+import vn.cybersoft.summerms.model.TrafficRecord;
 import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -16,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MyScheduleReceiver extends BroadcastReceiver {
 	public static final String TAG="MyScheduleReceiver";
@@ -47,6 +49,7 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 			Log.d(TAG, "mis");
 			dataHelper.deteleAllTable();
 			dataHelper=new DataMonitorHelper(mContext);
+			
 			Calendar calendar = Calendar.getInstance();
 			int year=calendar.get(Calendar.YEAR);
 			calendar.set(year, new Date().getMonth(), 2);
@@ -67,8 +70,24 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 
 		}
 
+		HashSet<Integer> intersection=new HashSet<Integer>(latest.getApps().keySet());
+		for (Integer uid : intersection) {
+			TrafficRecord latest_rec=latest.getApps().get(uid);
+			addAppData(uid,latest_rec.getTag(), latest_rec);
+		}
 
-
+	}
+	private void addAppData(int uid,CharSequence name, TrafficRecord latest_rec) {
+		if (latest_rec.getRx()>-1 || latest_rec.getTx()>-1) {
+			App app =new App();
+			app.setAppid(uid);
+			app.setAppName(name.toString());
+			app.setLaststartdownLoad(0);
+			app.setLaststartupLoad(0);
+			app.setStartdownLoad(latest_rec.getRx());
+			app.setStartupLoad(latest_rec.getTx());
+			if(!dataHelper.isAppContain(uid)) dataHelper.addApp(app);
+		}
 	}
 	public void setAlarm(Context context) {
 		alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);

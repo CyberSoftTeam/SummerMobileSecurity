@@ -364,7 +364,11 @@ public class FragmentTotal extends Fragment{
 		if((new Date().getDate()>1)&&(dateTraffic.getDate() != null)){
 				long dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
 				long dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
-				dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
+				if(dataR>-1 && dataT>-1)
+					dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
+				else{
+					dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()));
+				}
 				Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+dateTraffic.getDate());
 		}else{
 			Log.d(TAG, "mis");

@@ -51,7 +51,7 @@ public class PermissionTimerTask extends TimerTask {
 		Log.i(Constants.TAG, "===  Service is checking  ===");
 		checkPermission();
 	}
-
+	
 	/**
 	 * Check running permission
 	 */

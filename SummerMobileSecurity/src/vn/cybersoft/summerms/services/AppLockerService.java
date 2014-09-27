@@ -24,6 +24,7 @@ import vn.cybersoft.summerms.controllers.AppListFragment;
 import vn.cybersoft.summerms.controllers.EnterPINActivity;
 import vn.cybersoft.summerms.controllers.MainActivity;
 import vn.cybersoft.summerms.receivers.ScreenServiceReceiver;
+import vn.cybersoft.summerms.timers.DataTimer;
 import vn.cybersoft.summerms.timers.PermissionTimer;
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -44,11 +45,13 @@ public class AppLockerService extends Service {
 	private static final String t = "AppLockerService";
 	public static final int FOREGROUND_NTF_ID = 8681;
 	private final int PEMISSION_PERIOD = 3*1000;
+	private final int DATA_PERIOD = 60*1000;
 	public static boolean isRunning = false;
 
 	private ActivityManager activityManager;
 	private ScreenServiceReceiver receiver;
 	private PermissionTimer permissionTimer;
+	private DataTimer dataTimer;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -153,6 +156,8 @@ public class AppLockerService extends Service {
 		// Start checking timer
 		permissionTimer = new PermissionTimer(AppLockerService.this, activityManager);
 		permissionTimer.schedule(PEMISSION_PERIOD);
+		dataTimer = new DataTimer(AppLockerService.this, activityManager,getApplicationContext());
+		dataTimer.schedule(DATA_PERIOD);
 	}
 
 	/**
@@ -161,6 +166,10 @@ public class AppLockerService extends Service {
 	private void stopChecking() {
 		if (permissionTimer != null) {
 			permissionTimer.cancel();
+			System.gc();
+		}
+		if (dataTimer != null) {
+			dataTimer.cancel();
 			System.gc();
 		}
 	}
