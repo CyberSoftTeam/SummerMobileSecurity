@@ -62,7 +62,7 @@ public class DataTimerTask extends TimerTask {
 	 */
 	private void checkPermission() {
 		TrafficSnapshot latest=new TrafficSnapshot(mContext);
-		long dataCurrent=latest.getDevice().getRx()+latest.getDevice().getTx();
+		long dataCurrent=latest.getDevice().getRx()/(1024*1024)+latest.getDevice().getTx()/(1024*1024);
 		if(dataCurrent >getSharedPreferences()){
 			NotificationCompat.Builder mbBuilder=new NotificationCompat.Builder(mContext)
 			.setSmallIcon(R.drawable.ic_launcher)
