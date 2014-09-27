@@ -38,11 +38,11 @@
 
     <ToggleButton
         android:id="@+id/btn_locker"
+        style="@style/Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:focusable="false"
-        android:textColor="@android:color/black"
         android:textOff="@string/btn_lockApp"
         android:textOn="@string/btn_unlockApp" />
 

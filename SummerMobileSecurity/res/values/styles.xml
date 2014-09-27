@@ -1,32 +1,16 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
     <style name="AppBaseTheme" parent="Theme.Sherlock.Light.DarkActionBar">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+   		<item name="actionBarStyle">@style/Widget.SummerMS.ActionBar</item>
     </style>
 
-    <style name="Widget.MyTheme.ActionBar" parent="Widget.Sherlock.ActionBar">
-        <item name="android:background">@color/title_background</item>
-        <item name="background">@color/title_background</item>
-        
-        <item name="titleTextStyle">@style/HeaderText</item>
+    <style name="Widget.SummerMS.ActionBar" parent="Widget.Sherlock.ActionBar">
+        <item name="android:background">@color/summer_color</item>
+   		<item name="background">@color/summer_color</item>
     </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        
-        <item name="actionBarStyle">@style/Widget.MyTheme.ActionBar</item>
     </style>
-
 
     <style name="HeaderText">
         <item name="android:textColor">@color/standar</item>
@@ -120,12 +104,13 @@
     <style name="DialogActivityTheme" parent="@android:style/Theme.Dialog">
         <!-- <item name="android:windowTitleBackgroundStyle">@style/DialogBG</item> -->
     </style>
-    
-    	<!-- contact list -->
-    <style name="ContactListView">
-        <item name="android:scrollbarStyle">outsideInset</item>    </style>
 
-    <style name="listViewActivatedStyle"/>
+    <!-- contact list -->
+    <style name="ContactListView">
+        <item name="android:scrollbarStyle">outsideInset</item>
+    </style>
+
+    <style name="listViewActivatedStyle" />
 
     <style name="quickContactBadgeStyle">
         <item name="android:background">@drawable/quickcontact_badge_small</item>
@@ -140,14 +125,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="addressDetail" parent="@android:style/TextAppearance.Medium">
-    </style>
+    <style name="addressDetail" parent="@android:style/TextAppearance.Medium"></style>
 
     <style name="contactNameTitle" parent="@android:style/TextAppearance.Large">
         <item name="android:textSize">38sp</item>
     </style>
 
-    <style name="addressButton"/>
-    
+    <style name="addressButton" />
 
 </resources>

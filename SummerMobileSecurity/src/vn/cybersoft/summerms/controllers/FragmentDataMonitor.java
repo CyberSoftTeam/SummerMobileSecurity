@@ -18,21 +18,10 @@ package vn.cybersoft.summerms.controllers;
 /**
  * @author Phạm Văn Năm
  */
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-
 import vn.cybersoft.summerms.R;
-import vn.cybersoft.summerms.database.DataMonitorHelper;
-import vn.cybersoft.summerms.model.App;
-import vn.cybersoft.summerms.model.DateTraffic;
-import vn.cybersoft.summerms.model.TrafficRecord;
-import vn.cybersoft.summerms.model.TrafficSnapshot;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +44,11 @@ public class FragmentDataMonitor  extends Fragment{
 				FragmentTotal.class, null);
 		mTabHost.addTab(mTabHost.newTabSpec("statistics").setIndicator("Statistics"),
 				FragmentAllAppUserData.class, null);
+
+		for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
+			mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.summer_tab_indicator_holo);
+		}
+		
 		return mTabHost;
 	}
 

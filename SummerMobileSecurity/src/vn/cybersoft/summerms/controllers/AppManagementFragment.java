@@ -54,14 +54,10 @@ public class AppManagementFragment extends Fragment{
 		mTabHost.addTab(mTabHost.newTabSpec(runningApps).setIndicator(runningApps),
 				RunningListFragment.class, null);
 		
-		/*for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
-			TextView tabTitle = (TextView) mTabHost.getTabWidget()
-					.getChildAt(i).findViewById(android.R.id.title);
-			tabTitle.setTextSize(TEXTSIZE);
-			mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.rta_tab_selector);
+		for (int i = 0; i < mTabHost.getTabWidget().getChildCount(); i++) {
+			mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.summer_tab_indicator_holo);
 		}
-		 */
-
+		
 		return rootView;
 	}
 }

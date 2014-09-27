@@ -13,6 +13,6 @@
         android:color="@color/white" >
     </stroke>
 
-    <solid android:color="@color/standar" />
+    <solid android:color="@color/summer_color" />
 
 </shape>

@@ -18,6 +18,7 @@ package vn.cybersoft.summerms.controllers;
 import java.util.Arrays;
 
 import vn.cybersoft.summerms.R;
+import vn.cybersoft.summerms.utils.MessageUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -69,6 +70,7 @@ public class MainMenuFragment extends ListFragment {
 			newContent = new ContactsListFragment();
 			break;
 		case VIRUS_SCANNER:
+			MessageUtil.showDialogInfo(getActivity(), R.string.under_construction);
 			break;
 		case ABOUT:
 			newContent = new AboutApp();

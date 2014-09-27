@@ -77,13 +77,14 @@
             style="@style/addressDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:layout_weight="1"
-            android:text="Block SMS"
-            android:paddingRight="@dimen/padding" />
+            android:gravity="right"
+            android:paddingRight="@dimen/padding"
+            android:text="Block SMS" />
 
         <ToggleButton
             android:id="@+id/togglesms"
+            style="@style/Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
@@ -93,23 +94,26 @@
             android:text="ToggleButton" />
     </LinearLayout>
 
-    <LinearLayout  android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="?android:attr/listDivider"
         android:minHeight="40dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/call"
             style="@style/addressDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:layout_weight="1"
-            android:text="Block Call"
-            android:paddingRight="@dimen/padding" />
+            android:gravity="right"
+            android:paddingRight="@dimen/padding"
+            android:text="Block Call" />
+
         <ToggleButton
             android:id="@+id/togglecall"
+            style="@style/Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"

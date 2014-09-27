@@ -7,19 +7,20 @@
 
     <LinearLayout
         android:id="@+id/layout"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/tvdataset"
-            android:textSize="20sp"
-            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
-            android:hint="" >
+            android:hint=""
+            android:inputType="number"
+            android:textSize="20sp" >
+
             <requestFocus />
         </EditText>
 
@@ -45,31 +46,30 @@
             android:background="#61ade2" />
 
         <LinearLayout
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal" >
 
             <Button
                 android:id="@+id/bt_confirm"
+                style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:background="#3B5DE5"
-                android:text="@string/btn_ok" />
+                android:text="@string/btn_ok"/>
 
             <Button
-                android:layout_marginLeft="2dp"
                 android:id="@+id/bt_cancel"
+                style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:layout_weight="0.5"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
                 android:background="#3B5DE5"
-                android:text="@string/btn_cancel" />
+                android:text="@string/btn_cancel"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

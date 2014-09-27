@@ -28,6 +28,8 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends MainBaseActivity implements OnContactsInteractionListener {
@@ -139,7 +141,8 @@ public class MainActivity extends MainBaseActivity implements OnContactsInteract
 		// search results. Only used pre-HC.
 		return !isSearchResultView && super.onSearchRequested();
 	}
-	/*@Override
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getSupportMenuInflater().inflate(R.menu.main, menu);
@@ -155,5 +158,6 @@ public class MainActivity extends MainBaseActivity implements OnContactsInteract
 			break;
 		}
 		return super.onOptionsItemSelected(item);
-	}*/
+	}
+	
 }

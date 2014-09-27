@@ -76,6 +76,7 @@ import android.widget.ToggleButton;
  * {@link ContactDetailFragment#newInstance(android.net.Uri)}, passing as an argument the contact
  * Uri for the contact you want to display.
  */
+@SuppressLint("ValidFragment")
 public class ContactDetailFragment extends Fragment implements
 LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -407,7 +408,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 					// In the single pane layout, sets the activity title
 					// to the contact name. On HC+ this will be set as
 					// the ActionBar title text.
-					getActivity().setTitle(contactName);
+					// getActivity().setTitle(contactName);
 				}
 			}
 			break;

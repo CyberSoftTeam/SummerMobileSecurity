@@ -10,13 +10,13 @@ Actually the following functions are implemented:
 * Application manager
     - Overview of all applications in device, include application's permissions.
     - Allow user choose some application to lock with specific PIN.
-
+* SMS/Call blocking
+* Data monitor
 
 Further developments will include:
-* SMS/Application blocking
-* Data monitor
-* Virus & malware (pending)
-* Optimization (pending)
+* Secure user PIN (avoid clearing cache)
+* Virus & malware scanner
+* Optimization
 
 
 ##Dependencies
