@@ -74,6 +74,7 @@ public class DataMonitorHelper extends SQLiteOpenHelper{
 		Cursor c=sd.rawQuery("select * from "+TABLE_DAY, null);
 
 		while (c.moveToNext()) {
+			Log.e(TABLE_APP, c.getInt(c.getColumnIndex(Constants.VALUE_START_DOWNLOAD))+"");
 			DateTraffic result = new DateTraffic();
 			result.setDate(c.getString((c.getColumnIndex(Constants.DATE))));
 			result.setStartdownLoad(c.getInt(c.getColumnIndex(Constants.VALUE_START_DOWNLOAD)));
@@ -86,11 +87,10 @@ public class DataMonitorHelper extends SQLiteOpenHelper{
 		DateTraffic result=new DateTraffic();
 		SQLiteDatabase sd = getWritableDatabase();
 		Cursor c = sd.rawQuery("select * from "+TABLE_DAY
-				+" where "+Constants.DATE+"="+time, null);
+				+" where "+Constants.DATE+"='"+time+"'", null);
 		c.moveToNext();
 		Log.d("getDay",c.getCount()+"-----"+time);//long > int
 		if(c.getCount() !=0){
-			Log.d("getDay",c.getString((c.getColumnIndex(Constants.DATE))) );
 			result.setDate(c.getString((c.getColumnIndex(Constants.DATE))));
 			result.setStartdownLoad(c.getInt(c.getColumnIndex(Constants.VALUE_START_DOWNLOAD)));
 			Log.e("Data", c.getInt(c.getColumnIndex(Constants.VALUE_START_DOWNLOAD))+"");
@@ -117,7 +117,8 @@ public class DataMonitorHelper extends SQLiteOpenHelper{
 		values.put(Constants.VALUE_START_DOWNLOAD, dateTraffic.getStartdownLoad());
 		values.put(Constants.VALUE_START_UPLOAD, dateTraffic.getStartupLoad());
 		Log.d("DataHelper",dateTraffic.getDate());
-		getWritableDatabase().update(TABLE_DAY, values, Constants.DATE+"="+dateTraffic.getDate(), null);
+		Log.d("DataHelper",dateTraffic.getStartupLoad()+"");
+		getWritableDatabase().update(TABLE_DAY, values, Constants.DATE+"='"+dateTraffic.getDate()+"'", null);
 
 	}
 	

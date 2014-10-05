@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,12 +69,12 @@ public class FragmentTotal extends Fragment{
 	private DataMonitorHelper dataHelper;
 	public FragmentTotal() {
 	}
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView=inflater.inflate(R.layout.layout_fragment_daily_monitor, container,
 				false);
-		
+
 		dataHelper=new DataMonitorHelper(getActivity());
 		getData();
 		tvToday=(TextView) rootView.findViewById(R.id.tv_data_today);
@@ -93,7 +92,7 @@ public class FragmentTotal extends Fragment{
 		dataDow=0;
 		SaveData();
 		setDataForTextView();
-		long plan=getSharedPreferences();
+		long plan=getPlanPreferences();
 		Log.d("data", dataMonth+"-"+plan);
 		if(plan!=1 && (dataMonth/(1024*1024))<plan){
 			tvRemainingData.setText((plan-dataMonth/(1024*1024))+" MB");
@@ -131,7 +130,7 @@ public class FragmentTotal extends Fragment{
 							chartRemining.removeAllViewsInLayout();
 							DrawPieChart(dataUp/(1024*1024),dataDow/(1024*1024),dataUp/(1024*1024)+dataDow/(1024*1024));
 						}
-						putSharedPreferences(dataset);
+						putSharedPreferences(dataset,0,0,0);
 						dialog.dismiss();
 					}
 				});
@@ -150,6 +149,7 @@ public class FragmentTotal extends Fragment{
 	private void SaveData() {
 
 		new TrafficSnapshot(getActivity());
+
 		Calendar calendar = Calendar.getInstance();
 		int year=calendar.get(Calendar.YEAR);
 		calendar.set(year, Calendar.getInstance().get(Calendar.MONTH), 2);
@@ -158,21 +158,30 @@ public class FragmentTotal extends Fragment{
 		ArrayList<DateTraffic> lsDateTraffic=new ArrayList<DateTraffic>();
 		lsDateTraffic=dataHelper.getDAY();
 		ArrayList<Double> datas =new ArrayList<Double>();
-		Log.d("Datas", lsDateTraffic.size()+"");
 		for (int i = 0; i < lsDateTraffic.size(); i++) {
 			long data=lsDateTraffic.get(i).getStartdownLoad()+lsDateTraffic.get(i).getStartupLoad();
+			Log.d("Datas", data+"");
+			dataDow+=lsDateTraffic.get(i).getStartdownLoad();
+			dataUp+=lsDateTraffic.get(i).getStartupLoad();
+			if((i+1)==getDayPreferences())
+			{
+				if(calendar.get(Calendar.DAY_OF_MONTH)==getDayPreferences()){
+
+				}else{
+					ArrayList<Long> d=getDataPreferences();
+					data=lsDateTraffic.get(i).getStartdownLoad()-d.get(1)+lsDateTraffic.get(i).getStartupLoad()-d.get(0);;
+					dataDow-=d.get(1);
+					dataUp-=d.get(0);
+				}
+			}
 			data=data/(1024*1024);
 			datas.add((double)data);
 			if(data>max) max=data;
 			//set Data for textview
-			dataDow+=lsDateTraffic.get(i).getStartdownLoad();
-			dataUp+=lsDateTraffic.get(i).getStartupLoad();
-			Log.d("Datas", data+"");
 		}
 		dataMonth=(dataDow+dataUp);
-		dataToday=lsDateTraffic.get(Calendar.getInstance().get(Calendar.DATE)-1).getStartdownLoad()+
-				lsDateTraffic.get(Calendar.getInstance().get(Calendar.DATE)-1).getStartupLoad();
-
+		dataToday=(long) (datas.get(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)-1)*1);
+		Log.d(TAG, dataToday+"");
 		execute(getActivity(), datas);
 	}
 	public void setDataForTextView(){
@@ -184,10 +193,10 @@ public class FragmentTotal extends Fragment{
 			month=dataMonth/1024+" KB";
 		}
 		//today
-		if((dataToday/(1024*1024))!=0){
-			today=dataToday/(1024*1024)+" MB";
-		}else if((dataToday/1024)!=0){
-			today=dataToday/1024+" KB";
+		if(dataToday != 0){
+			today=dataToday+" MB";
+		}else if((dataToday*1024)!=0){
+			today=dataToday*1024+" KB";
 		}
 		tvThisMonth.setText(month);
 		tvToday.setText(today);
@@ -335,64 +344,97 @@ public class FragmentTotal extends Fragment{
 		}
 		return series;
 	}
-	public void putSharedPreferences(long plan){
+	public void putSharedPreferences(long plan,int day,long startUP,long startDow){
 
 		getActivity();
 		SharedPreferences pre=getActivity().getSharedPreferences("my_data", Context.MODE_PRIVATE);
 		SharedPreferences.Editor edit=pre.edit();
-		edit.putLong("plan",plan);
+		if(plan != 0)	
+		{		
+			edit.putLong("plan",plan);
+			edit.putBoolean("isPlan", true);
+		}
+		else {
+			Log.d(TAG,"Add Start--"+day+"-"+startUP+"--"+startDow);
+			edit.putInt("daystart",day);
+			edit.putLong("datastartup",startUP);
+			edit.putLong("datastartdow",startDow);
+		}
 		edit.commit();
 
 	}
-	public long getSharedPreferences()
+	public long getPlanPreferences()
 	{
 		SharedPreferences pre=getActivity().getSharedPreferences
 				("my_data",Context.MODE_PRIVATE);
 
 		if(pre != null){
-			Log.d("share", pre.getLong("plan", 1)+"");
+			Log.d("plan", pre.getLong("plan", 1)+"");
 			return pre.getLong("plan", 1);
 		}
 		return 1;
 	}
-	
-	@SuppressWarnings("deprecation")
+	public ArrayList<Long> getDataPreferences()
+	{
+		ArrayList<Long> d = new ArrayList<Long>();
+		SharedPreferences pre=getActivity().getSharedPreferences
+				("my_data",Context.MODE_PRIVATE);
+
+		if(pre != null){
+			d.add(pre.getLong("datastartup", 1));
+			d.add(pre.getLong("datastartdow", 1));
+			return d;
+		}
+		return null;
+	}
+	public int getDayPreferences()
+	{
+		SharedPreferences pre=getActivity().getSharedPreferences
+				("my_data",Context.MODE_PRIVATE);
+
+		if(pre != null){
+			return pre.getInt("daystart", 1);
+		}
+		return 1;
+	}
+
 	private void getData() {
+		Calendar calendar = Calendar.getInstance();
+		int year=calendar.get(Calendar.YEAR);
+		calendar.set(year, Calendar.getInstance().get(Calendar.MONTH), 2);
+		int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int month=Calendar.getInstance().get(Calendar.MONTH)+1;
+		int day=Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
 		latest=new TrafficSnapshot(getActivity());
 		DateTraffic dateTraffic=new DateTraffic();
-		dateTraffic=dataHelper.getDAY((new Date().getDate()-1)+"."+(new Date().getMonth()+1));
-		if((new Date().getDate()>1)&&(dateTraffic.getDate() != null)){
-				long dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
-				long dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
-				if(dataR>-1 && dataT>-1)
-					dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
-				else{
-					dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()));
-				}
-				Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+dateTraffic.getDate());
+
+		dateTraffic=dataHelper.getDAY((day-1)+"."+month);
+		if((day>1) && (dateTraffic.getDate() != null)){
+			long dataR=0;
+			long dataT=0;
+			dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
+			dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
+			if(dataR>-1 && dataT>-1){
+				dataHelper.updateDAY(new DateTraffic(day+"."+month,dataT,dataR));
+				Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+day);
+			}
+			else{
+				dataHelper.updateDAY(new DateTraffic(day+"."+month,latest.getDevice().getTx(),latest.getDevice().getRx()));
+			}
 		}else{
-			Log.d(TAG, "mis");
+			putSharedPreferences(0, day,latest.getDevice().getTx(),latest.getDevice().getRx());
+			Log.d(TAG, "day >1");
 			dataHelper.deteleAllTable();
 			dataHelper=new DataMonitorHelper(getActivity());
-			
-			Calendar calendar = Calendar.getInstance();
-			int year=calendar.get(Calendar.YEAR);
-			calendar.set(year, new Date().getMonth(), 2);
-			int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-			for (int i = 1; i <(new Date().getDate()); i++) {
-				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+
+			for (int i = 1; i <=dayNumber; i++) {
+				if(dataHelper.addDAY(new DateTraffic(i+"."+month,0,0))!=-1){
 					Log.d(TAG, "Add Day1-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
 				}
 			}
-			if(dataHelper.addDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()))!=-1){
-				Log.d(TAG, "Add Day-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
-			}
-			for (int i = (new Date().getDate())+1; i <=dayNumber; i++) {
-				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
-					Log.d(TAG, "Add Day2-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
-				}
-			}
-			//app
+			dataHelper.updateDAY(new DateTraffic(day+"."+month,latest.getDevice().getTx(),latest.getDevice().getRx()));
+
 		}
 
 		HashSet<Integer> intersection=new HashSet<Integer>(latest.getApps().keySet());

@@ -1,9 +1,6 @@
 package vn.cybersoft.summerms.services;
 import java.util.Calendar;
 
-
-
-import java.util.Date;
 import java.util.HashSet;
 
 import vn.cybersoft.summerms.database.DataMonitorHelper;
@@ -17,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
@@ -35,39 +33,40 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 		Log.d(TAG, "Start Traffic Day");
 		getData();
 	}
-	@SuppressWarnings("deprecation")
 	private void getData() {
+		Calendar calendar = Calendar.getInstance();
+		int year=calendar.get(Calendar.YEAR);
+		calendar.set(year, Calendar.getInstance().get(Calendar.MONTH), 2);
+		int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int month=Calendar.getInstance().get(Calendar.MONTH)+1;
+		int day=Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		
 		latest=new TrafficSnapshot(mContext);
 		DateTraffic dateTraffic=new DateTraffic();
-		dateTraffic=dataHelper.getDAY((new Date().getDate()-1)+"."+(new Date().getMonth()+1));
-		if((new Date().getDate()>1)&&(dateTraffic.getDate() != null)){
+		
+		dateTraffic=dataHelper.getDAY((day-1)+"."+month);
+		if((day>1) && (dateTraffic.getDate() != null)){
 			long dataR=latest.getDevice().getRx()-dateTraffic.getStartdownLoad();
 			long dataT=latest.getDevice().getTx()-dateTraffic.getStartupLoad();
-			dataHelper.updateDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),dataT,dataR));
-			Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+dateTraffic.getDate());
+			if(dataR>-1 && dataT>-1)
+				dataHelper.updateDAY(new DateTraffic(day+"."+month,dataT,dataR));
+			else{
+				dataHelper.updateDAY(new DateTraffic(day+"."+month,latest.getDevice().getTx(),latest.getDevice().getRx()));
+			}
+			Log.d(TAG, "Update new-"+dataR +"-"+dataT+"-"+day);
 		}else{
-			Log.d(TAG, "mis");
+			Log.d(TAG, "day >1");
+			putSharedPreferences(0, day,latest.getDevice().getTx(),latest.getDevice().getRx());
 			dataHelper.deteleAllTable();
 			dataHelper=new DataMonitorHelper(mContext);
 			
-			Calendar calendar = Calendar.getInstance();
-			int year=calendar.get(Calendar.YEAR);
-			calendar.set(year, new Date().getMonth(), 2);
-			int dayNumber=calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-			for (int i = 1; i <(new Date().getDate()); i++) {
-				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
+			for (int i = 1; i <=dayNumber; i++) {
+				if(dataHelper.addDAY(new DateTraffic(i+"."+month,0,0))!=-1){
 					Log.d(TAG, "Add Day1-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
 				}
 			}
-			if(dataHelper.addDAY(new DateTraffic(new Date().getDate()+"."+(new Date().getMonth()+1),latest.getDevice().getTx(),latest.getDevice().getRx()))!=-1){
-				Log.d(TAG, "Add Day-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
-			}
-			for (int i = (new Date().getDate())+1; i <=dayNumber; i++) {
-				if(dataHelper.addDAY(new DateTraffic((i)+"."+(new Date().getMonth()+1),0,0))!=-1){
-					Log.d(TAG, "Add Day2-"+latest.getDevice().getRx() +"-"+latest.getDevice().getTx());
-				}
-			}
-
+			dataHelper.updateDAY(new DateTraffic(day+"."+month,latest.getDevice().getTx(),latest.getDevice().getRx()));
+			
 		}
 
 		HashSet<Integer> intersection=new HashSet<Integer>(latest.getApps().keySet());
@@ -75,6 +74,7 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 			TrafficRecord latest_rec=latest.getApps().get(uid);
 			addAppData(uid,latest_rec.getTag(), latest_rec);
 		}
+
 
 	}
 	private void addAppData(int uid,CharSequence name, TrafficRecord latest_rec) {
@@ -111,5 +111,21 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 		pm.setComponentEnabledSetting(receiver,
 				PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
 				PackageManager.DONT_KILL_APP);           
+	}
+	public void putSharedPreferences(long plan,int day,long startUP,long startDow){
+
+		SharedPreferences pre=mContext.getSharedPreferences("my_data", Context.MODE_PRIVATE);
+		SharedPreferences.Editor edit=pre.edit();
+		if(plan != 0)	
+			edit.putLong("plan",plan);
+		else {
+			Log.d(TAG,"Add Start--"+day+"-"+startUP);
+			edit.putInt("daystart",day);
+			edit.putLong("datastartup",startUP);
+			edit.putLong("datastartdow",startDow);
+			
+		}
+		edit.commit();
+
 	}
 } 

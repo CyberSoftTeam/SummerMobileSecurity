@@ -30,8 +30,8 @@ public class DataTimer extends Timer {
 	 * @param context
 	 * @param db
 	 */
-	public DataTimer(AppLockerService service, ActivityManager activityManager,Context mContext) {
-		task = new DataTimerTask(service, activityManager,mContext);
+	public DataTimer(Context mContext) {
+		task = new DataTimerTask(mContext);
 	}
 
 	/**

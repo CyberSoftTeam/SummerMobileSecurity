@@ -156,7 +156,7 @@ public class AppLockerService extends Service {
 		// Start checking timer
 		permissionTimer = new PermissionTimer(AppLockerService.this, activityManager);
 		permissionTimer.schedule(PEMISSION_PERIOD);
-		dataTimer = new DataTimer(AppLockerService.this, activityManager,getApplicationContext());
+		dataTimer = new DataTimer(getApplicationContext());
 		dataTimer.schedule(DATA_PERIOD);
 	}
 

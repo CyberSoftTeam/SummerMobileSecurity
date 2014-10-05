@@ -35,8 +35,6 @@ public class DataTimerTask extends TimerTask {
 
 	// OS setting packages
 	NotificationManager notificationManager;
-	private ActivityManager activityManager;
-	private AppLockerService service;
 
 	/**
 	 * Constructor
@@ -44,9 +42,8 @@ public class DataTimerTask extends TimerTask {
 	 * @param activityManager
 	 */
 	private Context mContext;
-	public DataTimerTask(AppLockerService service, ActivityManager activityManager,Context mContext) {
-		this.activityManager = activityManager;
-		this.service = service;
+	public DataTimerTask(
+			Context mContext) {
 		this.mContext=mContext;
 		notificationManager = (NotificationManager) this.mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 	}
@@ -63,17 +60,17 @@ public class DataTimerTask extends TimerTask {
 	private void checkPermission() {
 		TrafficSnapshot latest=new TrafficSnapshot(mContext);
 		long dataCurrent=latest.getDevice().getRx()/(1024*1024)+latest.getDevice().getTx()/(1024*1024);
-		if(dataCurrent >getSharedPreferences()){
+		if(dataCurrent >getDataPlant()&& isPlan()){
 			NotificationCompat.Builder mbBuilder=new NotificationCompat.Builder(mContext)
 			.setSmallIcon(R.drawable.ic_launcher)
-			.setContentTitle(R.string.app_name+"")
+			.setContentTitle("Summer Mobile Security")
 			.setContentText("You have exceeded the default data set!")
 			.setAutoCancel(true);
-			
 			notificationManager.notify(1, mbBuilder.build());
+			putisPlan();
 		}
 	}
-	public long getSharedPreferences()
+	public long getDataPlant()
 	{
 		SharedPreferences pre=mContext.getSharedPreferences
 				("my_data",Context.MODE_PRIVATE);
@@ -83,5 +80,25 @@ public class DataTimerTask extends TimerTask {
 			return pre.getLong("plan", 1);
 		}
 		return 1;
+	}
+	public boolean isPlan()
+	{
+		SharedPreferences pre=mContext.getSharedPreferences
+				("my_data",Context.MODE_PRIVATE);
+		if(pre != null){
+			Log.d("share", pre.getLong("plan", 1)+"");
+			return pre.getBoolean("isPlan", false);
+		}
+		return false;
+	}
+	public void putisPlan()
+	{
+		SharedPreferences pre=mContext.getSharedPreferences
+				("my_data",Context.MODE_PRIVATE);
+		SharedPreferences.Editor edit=pre.edit();
+		if(pre != null){
+			edit.putBoolean("isPlan", false);
+		}
+		edit.commit();
 	}
 }

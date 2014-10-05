@@ -51,6 +51,7 @@
     <string name="this_month">This Month: </string>
     <string name="remaining">Remaining:</string>
     <string name="set_data_plant">Set data plan</string>
+    <string name="title_data">Set value > 1 if you want trace data usage</string>
 
      <!-- start contact list string -->
     <string name="activity_contacts_list">Contacts List</string>
